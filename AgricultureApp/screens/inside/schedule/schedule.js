@@ -48,7 +48,7 @@ export default function Schedule({ navigation, dataFromHomeStack, onDataFromStac
                     <View style={styles.button}>
 
                         <TouchableOpacity onPress={() => navigation.navigate('ScreenTest')}>
-                            <MaterialIcons name="playlist-add" size={60} color="#C4FCE8" />
+                            <MaterialIcons name="playlist-add" size={60} color="white" />
                         </TouchableOpacity>
 
                     </View>
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     },
     button: {
         position: 'absolute',
-        right: 0,
-        bottom: 70
+        right: 20,
+        bottom: 90
     }
 
 

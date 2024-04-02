@@ -5,20 +5,17 @@ const styles = StyleSheet.create({
     item: {
         flexDirection: 'row',
     },
-    date: {
-        flex: 1,
-        backgroundColor: 'rgba(255, 255, 255, 0)'
-    },
+
     task: {
-        flex: 5,
+        flex: 1,
         backgroundColor: '#C4FCE8'
     },
     subtask: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 5,
+        paddingVertical: 10,
         paddingLeft: 20,
-        paddingRight: 10
+        paddingRight: 30
     }
 })
 
