@@ -11,12 +11,22 @@ export default function ScreenTest({ navigation }) {
     const [show2, setShow2] = useState(false);
     const [start_time, setStart_time] = useState("null");
     const [end_time, setEnd_time] = useState("null");
-    const [cycle, onChangeCycle] = useState('0');
-    const [nitorValue, onChangeNitorValue] = useState('0');
-    const [kaliValue, onChangeKaliValue] = useState('0');
-    const [photphoValue, onChangePhotphoValue] = useState('0');
+    const [cycle, setCycle] = useState('0');
+    const [nitorValue, setNitorValue] = useState('0');
+    const [kaliValue, setKaliValue] = useState('0');
+    const [photphoValue, setPhotphoValue] = useState('0');
 
-
+    const sendSchedule = () => {
+        const dataToPass = {
+            start_time: start_time,
+            end_time: end_time,
+            nitorValue: nitorValue,
+            kaliValue: kaliValue,
+            photphoValue: photphoValue,
+            cycle: cycle
+        }
+        navigation.navigate('Schedule', { inputData: dataToPass });
+    }
     const onChange1 = (e, selectedDate) => {
 
         setShow1(false);
@@ -81,7 +91,7 @@ export default function ScreenTest({ navigation }) {
                 </View>
                 <View style={styles.body}>
                     <View style={styles.task}>
-                        <Text style={{ paddingVertical: 5, fontWeight: 'bold', textAlign: 'center', backgroundColor: '#6CDDD0' }}>Lịch tưới 1</Text>
+                        <Text style={{ paddingVertical: 10, fontWeight: 'bold', textAlign: 'center', backgroundColor: '#6CDDD0' }}>Lịch tưới</Text>
 
                         <View style={styles.subtask}>
                             <Text>Bắt đầu: </Text>
@@ -98,21 +108,21 @@ export default function ScreenTest({ navigation }) {
                         <View style={styles.subtask}>
                             <Text>N P K: </Text>
                             <TextInput style={styles.input}
-                                onChangeText={onChangeNitorValue}
+                                onChangeText={setNitorValue}
                                 value={nitorValue}
                                 placeholder="0"
                                 keyboardType="numeric"
                             />
                             <Text>ml</Text>
                             <TextInput style={styles.input}
-                                onChangeText={onChangeKaliValue}
+                                onChangeText={setKaliValue}
                                 value={kaliValue}
                                 placeholder="0"
                                 keyboardType="numeric"
                             />
                             <Text>ml</Text>
                             <TextInput style={styles.input}
-                                onChangeText={onChangePhotphoValue}
+                                onChangeText={setPhotphoValue}
                                 value={photphoValue}
                                 placeholder="0"
                                 keyboardType="numeric"
@@ -122,12 +132,30 @@ export default function ScreenTest({ navigation }) {
                         <View style={styles.subtask}>
                             <Text>Lặp lại: </Text>
                             <TextInput style={styles.input}
-                                onChangeText={onChangeCycle}
+                                onChangeText={setCycle}
                                 value={cycle}
                                 placeholder="0"
                                 keyboardType="numeric"
                             />
                             <Text>lần</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+
+                            <View style={{ flex: 1, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ paddingVertical: 10, color: 'white', fontSize: 15 }}>Hủy</Text>
+                            </View>
+                            <TouchableOpacity onPress={sendSchedule}>
+                                <View style={{ flex: 1, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={{ color: 'white', fontSize: 15 }}>Lưu lại</Text>
+                                </View>
+                            </TouchableOpacity>
+
+
+                            {/* <Button title='Hủy' color='red' />
+ 
+
+                            <Button title='Lưu' color='green' /> */}
+
                         </View>
 
                     </View>

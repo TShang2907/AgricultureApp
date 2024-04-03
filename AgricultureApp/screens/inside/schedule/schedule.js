@@ -5,9 +5,16 @@ import Task from './task';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-export default function Schedule({ navigation, dataFromHomeStack, onDataFromStackScreen }) {
+export default function Schedule({ navigation, dataFromHomeStack, onDataFromStackScreen, route }) {
 
     console.log('From Schedule Stack', dataFromHomeStack);
+
+    //const { inputData } = route.params?.inputData;
+    // if (!route.params || !route.params.inputData) {
+    //     return navigation.goBack();
+    // }
+
+
 
     const [data, setData] = useState(0);
 
@@ -48,7 +55,7 @@ export default function Schedule({ navigation, dataFromHomeStack, onDataFromStac
                     <View style={styles.button}>
 
                         <TouchableOpacity onPress={() => navigation.navigate('ScreenTest')}>
-                            <MaterialIcons name="playlist-add" size={60} color="white" />
+                            <MaterialIcons name="add-circle" size={70} color="#C4FCE8" />
                         </TouchableOpacity>
 
                     </View>

@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Button } from 'react-native';
 import styles from './styleSchedule';
 import { Switch } from 'react-native-switch';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 const Task = () => {
     const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+    useEffect(() => {
+        console.log('isEnabled: ', isEnabled);
+        if (isEnabled) setStatus('Đang chờ tưới');
+        else setStatus('Chưa kích hoạt')
+    }, [isEnabled]);
+
     const [cycle, setCycle] = useState(0);
+    const [startTime, setStartTime] = useState('null');
+    const [endTime, setEndTime] = useState('null');
+    const [nitorValue, onChangeNitorValue] = useState('0');
+    const [kaliValue, onChangeKaliValue] = useState('0');
+    const [photphoValue, onChangePhotphoValue] = useState('0');
+    const [status, setStatus] = useState('Chưa kích hoạt');
+
     return (
         <TouchableOpacity>
             <View style={styles.item}>
@@ -14,7 +27,29 @@ const Task = () => {
                     <Text style={{ fontSize: 25, color: '#6CDDD0', fontWeight: 'bold' }}>2/3</Text>
                 </View> */}
                 <View style={styles.task}>
-                    <Text style={{ paddingVertical: 5, fontWeight: 'bold', textAlign: 'center', backgroundColor: '#6CDDD0' }}>Lịch tưới 1</Text>
+                    <View style={{ flexDirection: 'row', flex: 1, paddingVertical: 10, backgroundColor: '#6CDDD0' }}>
+
+                        <View style={{ flex: 3, justifyContent: 'center', flexDirection: 'row' }}>
+                            <Text style={{ fontWeight: 'bold' }}>Lịch tưới</Text>
+                            <Text style={{ paddingLeft: 10, fontWeight: 'bold' }}>1</Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Switch
+                                value={isEnabled}
+                                onValueChange={() => setIsEnabled(!isEnabled)}
+
+                                inActiveText='Tắt'
+                                activeText='Bật'
+                                activeTextStyle={{ fontSize: 12 }}
+                                inactiveTextStyle={{ fontSize: 12 }}
+                                circleSize={30}
+                                barHeight={25}
+                            />
+                        </View>
+
+                    </View>
+
+
                     <View style={styles.subtask}>
                         <Text>Bắt đầu: </Text>
                         <Text>11:45</Text>
@@ -23,39 +58,28 @@ const Task = () => {
                     </View>
                     <View style={styles.subtask}>
                         <Text>N P K: </Text>
-                        <Text>20ml</Text>
-                        <Text>10ml</Text>
-                        <Text>20ml</Text>
+                        <Text>20</Text>
+                        <Text>ml</Text>
+                        <Text>20</Text>
+                        <Text>ml</Text>
+                        <Text>20</Text>
+                        <Text>ml</Text>
                     </View>
                     <View style={styles.subtask}>
                         <Text>Lặp lai: </Text>
                         <Text>{cycle}</Text>
                         <Text>ngày</Text>
-                        <Switch
-                            value={isEnabled}
-                            onValueChange={() => setIsEnabled(!isEnabled)}
-                            // trackColor={{ false: '#767577', true: '#81b0ff' }}
-                            // thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                            // ios_backgroundColor="#3e3e3e"
-                            activeText={'Bật'}
-                            inActiveText={'Tắt'}
-                            circleSize={32}
-                            barHeight={30}
-                            switchWidthMultiplier={2}
-
-                        // backgroundActive={'green'}
-                        // backgroundInactive={'gray'}
-                        // circleActiveColor={'#30a566'}
-                        // circleInActiveColor={'#000000'}
-                        />
 
 
                     </View>
                     <View style={styles.subtask}>
 
                         <Text>Trang thái: </Text>
-                        <Text>Đang tưới</Text>
-                        <MaterialCommunityIcons name="playlist-remove" size={45} color="red" />
+                        <Text>{status}</Text>
+                        <TouchableOpacity onPress={() => alert('Bạn thực sự muốn hủy lịch tưới')}>
+                            <MaterialCommunityIcons name="table-large-remove" size={35} color="#FF8484" />
+                        </TouchableOpacity>
+
                     </View>
                 </View>
             </View>
