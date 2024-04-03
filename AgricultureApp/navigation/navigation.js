@@ -5,7 +5,7 @@ import Register from '../screens/outside/register';
 import Monitor from '../screens/inside/cropMonitor/monitor';
 import Controller from '../screens/inside/controller/controller'
 import MqttProvider from '../dataProvider'
-import ScreenTest from '../screenTest'
+import ScheduleSetting from '../screens/inside/schedule/scheduleSetting'
 import Schedule from '../screens/inside/schedule/schedule';
 const Stack = createNativeStackNavigator()
 export default function AppNavigation() {
@@ -37,9 +37,9 @@ export default function AppNavigation() {
                         component={Controller}
                     />
                     <Stack.Screen
-                        name="ScreenTest"
+                        name="ScheduleSetting"
                         options={{ headerShown: false }}
-                        component={ScreenTest}
+                        component={ScheduleSetting}
                     />
                     <Stack.Screen
                         name="Schedule"

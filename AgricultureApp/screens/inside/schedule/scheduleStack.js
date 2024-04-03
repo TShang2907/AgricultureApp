@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ScreenTest from '../../../screenTest';
+import ScheduleSetting from './scheduleSetting';
 import Schedule from './schedule';
 import { MqttContext } from '../../../dataProvider';
 const Stack = createNativeStackNavigator()
@@ -9,11 +9,15 @@ const ScheduleStack = () => {
     const dataReceived = useContext(MqttContext);
     console.log('Data to Schedule', dataReceived);
 
-    const [dataFromStackScreen, setDataFromStackScreen] = useState(0);
 
-    useEffect(() => {
-        console.log('Data: ', dataFromStackScreen);
-    }, [dataFromStackScreen]);
+    const [scheduleList, setScheduleList] = useState([]);
+    const handleAddSchedule = (schedule) => {
+        setScheduleList([...scheduleList, schedule]);
+        //setDataFromScheduleSetting(schedule);
+    }
+
+
+    //const [dataFromScheduleSetting, setDataFromScheduleSetting] = useState();
 
 
 
@@ -24,17 +28,18 @@ const ScheduleStack = () => {
                 options={{ headerShown: false }}>
                 {(props) => <Schedule
                     {...props}
-                    dataFromHomeStack={dataReceived.isEnabled1}
-                    onDataFromStackScreen={(data) => setDataFromStackScreen(data)}
+                    //dataFromScheduleStack={dataFromScheduleSetting}
+                    scheduleList={scheduleList}
                 />}
 
             </Stack.Screen>
 
             <Stack.Screen
-                name="ScreenTest"
+                name="ScheduleSetting"
                 options={{ headerShown: false }}>
-                {(props) => <ScreenTest
+                {(props) => <ScheduleSetting
                     {...props}
+                    onDataFromScheduleStack={handleAddSchedule}//(data) => setDataFromScheduleSetting(data)}
                 />}
             </Stack.Screen>
         </Stack.Navigator>

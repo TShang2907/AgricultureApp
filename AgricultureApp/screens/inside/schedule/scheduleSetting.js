@@ -4,29 +4,49 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-export default function ScreenTest({ navigation }) {
+export default function ScheduleSetting({ navigation, onDataFromScheduleStack }) {
 
     const [date, setDate] = useState(new Date());
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
-    const [start_time, setStart_time] = useState("null");
-    const [end_time, setEnd_time] = useState("null");
+    const [start_time, setStart_time] = useState('Null');
+    const [end_time, setEnd_time] = useState('Null');
     const [cycle, setCycle] = useState('0');
     const [nitorValue, setNitorValue] = useState('0');
     const [kaliValue, setKaliValue] = useState('0');
     const [photphoValue, setPhotphoValue] = useState('0');
+    const [isActive, setIsActive] = useState(false);
+    const [dataToPass, setDataToPass] = useState({
+        startTime: start_time,
+        endTime: end_time,
+        nitorValue: nitorValue,
+        kaliValue: kaliValue,
+        photphoValue: photphoValue,
+        cycle: cycle,
+        isActive: isActive
+    })
 
     const sendSchedule = () => {
-        const dataToPass = {
-            start_time: start_time,
-            end_time: end_time,
+        setDataToPass({
+            startTime: start_time,
+            endTime: end_time,
             nitorValue: nitorValue,
             kaliValue: kaliValue,
             photphoValue: photphoValue,
-            cycle: cycle
-        }
-        navigation.navigate('Schedule', { inputData: dataToPass });
+            cycle: cycle,
+            isActive: true
+        });
+        alert('Lịch tưới đã được kích hoạt và lưu lại');
+        //navigation.navigate('Schedule');
     }
+
+    useEffect(() => {
+        if (dataToPass.startTime != 'Null' && dataToPass.endTime != 'Null') {
+            console.log("Send From ScheduleSetting to ScheduleStack");
+            onDataFromScheduleStack(dataToPass);
+        }
+    }, [dataToPass]);
+
     const onChange1 = (e, selectedDate) => {
 
         setShow1(false);
@@ -79,7 +99,7 @@ export default function ScreenTest({ navigation }) {
             <Image
                 blurRadius={70}
                 style={styles.backgroundImage}
-                source={require('./images/bg.png')}
+                source={require('../../../images/bg.png')}
             />
             <View style={styles.content}>
                 <View style={styles.header}>
@@ -110,21 +130,21 @@ export default function ScreenTest({ navigation }) {
                             <TextInput style={styles.input}
                                 onChangeText={setNitorValue}
                                 value={nitorValue}
-                                placeholder="0"
+
                                 keyboardType="numeric"
                             />
                             <Text>ml</Text>
                             <TextInput style={styles.input}
                                 onChangeText={setKaliValue}
                                 value={kaliValue}
-                                placeholder="0"
+
                                 keyboardType="numeric"
                             />
                             <Text>ml</Text>
                             <TextInput style={styles.input}
                                 onChangeText={setPhotphoValue}
                                 value={photphoValue}
-                                placeholder="0"
+
                                 keyboardType="numeric"
                             />
                             <Text>ml</Text>
@@ -134,7 +154,7 @@ export default function ScreenTest({ navigation }) {
                             <TextInput style={styles.input}
                                 onChangeText={setCycle}
                                 value={cycle}
-                                placeholder="0"
+
                                 keyboardType="numeric"
                             />
                             <Text>lần</Text>
@@ -144,10 +164,10 @@ export default function ScreenTest({ navigation }) {
                             <View style={{ flex: 1, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ paddingVertical: 10, color: 'white', fontSize: 15 }}>Hủy</Text>
                             </View>
-                            <TouchableOpacity onPress={sendSchedule}>
-                                <View style={{ flex: 1, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ color: 'white', fontSize: 15 }}>Lưu lại</Text>
-                                </View>
+                            <TouchableOpacity onPress={sendSchedule} style={{ flex: 1, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center' }} >
+
+                                <Text style={{ color: 'white', fontSize: 15 }}>Lưu lại</Text>
+
                             </TouchableOpacity>
 
 

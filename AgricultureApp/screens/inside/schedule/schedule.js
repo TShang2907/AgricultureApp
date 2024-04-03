@@ -5,30 +5,26 @@ import Task from './task';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-export default function Schedule({ navigation, dataFromHomeStack, onDataFromStackScreen, route }) {
+export default function Schedule({ navigation, scheduleList }) {
 
-    console.log('From Schedule Stack', dataFromHomeStack);
+    //console.log('Data from ScheduleStack:', dataFromScheduleStack);
 
-    //const { inputData } = route.params?.inputData;
-    // if (!route.params || !route.params.inputData) {
-    //     return navigation.goBack();
-    // }
+    console.log('ScheduleList: ', scheduleList);
 
 
 
-    const [data, setData] = useState(0);
+    const [isActive, setIsActive] = useState(false);
+    const [index, setIndex] = useState(0);
 
-    const handleData = () => {
-        setData(data + 1);
-
+    const handlUpdateIsActive = (isActive, index) => {
+        setIsActive(isActive);
+        setIndex(index);
     };
 
     useEffect(() => {
-        console.log("Send");
-        onDataFromStackScreen(data);
-    }, [data]);
-
-
+        console.log('Upadte IsActive: ', isActive);
+        console.log('Index: ', index);
+    }, [isActive]);
 
     return (
 
@@ -44,7 +40,11 @@ export default function Schedule({ navigation, dataFromHomeStack, onDataFromStac
                 </View>
                 <View style={styles.body}>
                     <ScrollView>
-                        <Task />
+                        {
+                            scheduleList.map((item, index) => {
+                                return <Task key={index} schedule={item} index={index} updateIsActive={handlUpdateIsActive} />
+                            })
+                        }
                     </ScrollView>
                 </View>
                 <View style={styles.bottom}>
@@ -54,7 +54,7 @@ export default function Schedule({ navigation, dataFromHomeStack, onDataFromStac
                 <View style={styles.bottom}>
                     <View style={styles.button}>
 
-                        <TouchableOpacity onPress={() => navigation.navigate('ScreenTest')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ScheduleSetting')}>
                             <MaterialIcons name="add-circle" size={70} color="#C4FCE8" />
                         </TouchableOpacity>
 

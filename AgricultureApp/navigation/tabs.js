@@ -6,7 +6,6 @@ import Register from '../screens/outside/register';
 import Monitor from '../screens/inside/cropMonitor/monitor';
 import Controller from '../screens/inside/controller/controller'
 import MqttProvider from '../dataProvider'
-import ScreenTest from '../screenTest'
 import Schedule from '../screens/inside/schedule/schedule';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -29,7 +28,6 @@ function Tabs() {
             tabBarLabelStyle: styles.text
 
           }}
-
 
         >
           <Tab.Screen
