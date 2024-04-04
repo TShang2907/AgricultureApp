@@ -74,6 +74,9 @@ export default MqttProvider = ({ children }) => {
     }
 
   };
+  const updateSchedule = (schedule) => {
+    console.log('Update Schedule At Local: ', schedule);
+  }
 
   useEffect(() => {
     client.connect({
@@ -158,7 +161,7 @@ export default MqttProvider = ({ children }) => {
   }
 
   return (
-    <MqttContext.Provider value={{ valueTemp, setValueTemp, labelTemp, setLabelTemp, valueHumi, setValueHumi, updateData, isEnabled1, isEnabled2, isEnabled7, isEnabled8 }}>
+    <MqttContext.Provider value={{ valueTemp, setValueTemp, labelTemp, setLabelTemp, valueHumi, setValueHumi, updateData, isEnabled1, isEnabled2, isEnabled7, isEnabled8, updateSchedule }}>
       {children}
     </MqttContext.Provider>
   );

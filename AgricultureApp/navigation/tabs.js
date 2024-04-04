@@ -6,7 +6,6 @@ import Register from '../screens/outside/register';
 import Monitor from '../screens/inside/cropMonitor/monitor';
 import Controller from '../screens/inside/controller/controller'
 import MqttProvider from '../dataProvider'
-import Schedule from '../screens/inside/schedule/schedule';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';

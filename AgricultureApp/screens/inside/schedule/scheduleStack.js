@@ -11,15 +11,38 @@ const ScheduleStack = () => {
 
 
     const [scheduleList, setScheduleList] = useState([]);
+
     const handleAddSchedule = (schedule) => {
         setScheduleList([...scheduleList, schedule]);
-        //setDataFromScheduleSetting(schedule);
     }
 
 
-    //const [dataFromScheduleSetting, setDataFromScheduleSetting] = useState();
 
+    const handleIsActive = (isActive, index) => {
+        if (scheduleList.length === 0) {
+            console.log('Mang rong');
+        } else {
+            scheduleList[index].isActive = isActive;
+            console.log('Index:', index);
+            console.log('IsActive update at ScheduleStack: ', scheduleList[index].isActive);
+            dataReceived.updateSchedule(scheduleList);
+        }
+    }
 
+    const handleRemoveSchedule = (index) => {
+        if (scheduleList.length === 0) {
+            console.log('Mang rong');
+        } else {
+            const newList = [...scheduleList];
+            newList.splice(index, 1);
+            setScheduleList(newList);
+            console.log('Remove: ', index);
+        }
+    }
+
+    useEffect(() => {
+        dataReceived.updateSchedule(scheduleList);
+    }, [scheduleList]);
 
     return (
         <Stack.Navigator initialRouteName="Schedule">
@@ -28,7 +51,9 @@ const ScheduleStack = () => {
                 options={{ headerShown: false }}>
                 {(props) => <Schedule
                     {...props}
-                    //dataFromScheduleStack={dataFromScheduleSetting}
+                    updateIsActive={handleIsActive}
+                    removeSchedule={handleRemoveSchedule}
+
                     scheduleList={scheduleList}
                 />}
 

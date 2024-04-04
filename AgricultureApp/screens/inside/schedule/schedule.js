@@ -5,7 +5,7 @@ import Task from './task';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-export default function Schedule({ navigation, scheduleList }) {
+export default function Schedule({ navigation, scheduleList, updateIsActive, removeSchedule }) {
 
     //console.log('Data from ScheduleStack:', dataFromScheduleStack);
 
@@ -20,11 +20,14 @@ export default function Schedule({ navigation, scheduleList }) {
         setIsActive(isActive);
         setIndex(index);
     };
+    const handleRemoveSchedule = (index) => {
+        removeSchedule(index);
+    }
 
     useEffect(() => {
-        console.log('Upadte IsActive: ', isActive);
-        console.log('Index: ', index);
-    }, [isActive]);
+        updateIsActive(isActive, index);
+
+    }, [isActive, index]);
 
     return (
 
@@ -42,7 +45,7 @@ export default function Schedule({ navigation, scheduleList }) {
                     <ScrollView>
                         {
                             scheduleList.map((item, index) => {
-                                return <Task key={index} schedule={item} index={index} updateIsActive={handlUpdateIsActive} />
+                                return <Task key={index} schedule={item} index={index} updateIsActive={handlUpdateIsActive} removeSchedule={handleRemoveSchedule} />
                             })
                         }
                     </ScrollView>

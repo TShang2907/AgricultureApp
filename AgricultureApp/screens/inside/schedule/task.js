@@ -7,14 +7,20 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Task = (props) => {
     console.log('Task is added: ', props.schedule);
+
     const [isEnabled, setIsEnabled] = useState(props.schedule.isActive);
+    const [index, setIndex] = useState(props.index);
 
     const [status, setStatus] = useState('Chưa kích hoạt');
-    const [isRemove, setIsRemove] = useState(false);
+
+
+
     useEffect(() => {
         if (isEnabled) setStatus('Đang chờ tưới');
         else setStatus('Chưa kích hoạt')
-        props.updateIsActive(isEnabled, props.index);
+        console.log('IsActive at Task: ', isEnabled);
+        props.updateIsActive(isEnabled, index);
+
     }, [isEnabled]);
 
     // const [cycle, setCycle] = useState(0);
@@ -80,7 +86,10 @@ const Task = (props) => {
 
                     <Text>Trang thái: </Text>
                     <Text>{status}</Text>
-                    <TouchableOpacity onPress={() => alert('Bạn thực sự muốn hủy lịch tưới')}>
+                    <TouchableOpacity onPress={() => {
+                        alert('Bạn thực sự muốn hủy lịch tưới');
+                        props.removeSchedule(index);
+                    }}>
                         <MaterialCommunityIcons name="table-large-remove" size={35} color="#FF8484" />
                     </TouchableOpacity>
 
