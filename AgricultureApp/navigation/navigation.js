@@ -12,42 +12,42 @@ export default function AppNavigation() {
     return (
 
         <NavigationContainer>
-            <MqttProvider>
-                <Stack.Navigator initialRouteName="Monitor">
 
-                    <Stack.Screen
-                        name="Login"
-                        options={{ headerShown: false }}
-                        component={Login}
-                    />
+            <Stack.Navigator initialRouteName="Monitor">
 
-                    <Stack.Screen
-                        name="Register"
-                        options={{ headerShown: false }}
-                        component={Register}
-                    />
-                    <Stack.Screen
-                        name="Monitor"
-                        options={{ headerShown: false }}
-                        component={Monitor}
-                    />
-                    <Stack.Screen
-                        name="Controller"
-                        options={{ headerShown: false }}
-                        component={Controller}
-                    />
-                    <Stack.Screen
-                        name="ScheduleSetting"
-                        options={{ headerShown: false }}
-                        component={ScheduleSetting}
-                    />
-                    <Stack.Screen
-                        name="Schedule"
-                        options={{ headerShown: false }}
-                        component={Schedule}
-                    />
-                </Stack.Navigator>
-            </MqttProvider>
+                <Stack.Screen
+                    name="Login"
+                    options={{ headerShown: false }}
+                    component={Login}
+                />
+
+                <Stack.Screen
+                    name="Register"
+                    options={{ headerShown: false }}
+                    component={Register}
+                />
+                <Stack.Screen
+                    name="Monitor"
+                    options={{ headerShown: false }}
+                    component={Monitor}
+                />
+                <Stack.Screen
+                    name="Controller"
+                    options={{ headerShown: false }}
+                    component={Controller}
+                />
+                <Stack.Screen
+                    name="ScheduleSetting"
+                    options={{ headerShown: false }}
+                    component={ScheduleSetting}
+                />
+                <Stack.Screen
+                    name="Schedule"
+                    options={{ headerShown: false }}
+                    component={Schedule}
+                />
+            </Stack.Navigator>
+
         </NavigationContainer>
 
     );

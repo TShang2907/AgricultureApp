@@ -15,8 +15,8 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
     const [nitorValue, setNitorValue] = useState('0');
     const [kaliValue, setKaliValue] = useState('0');
     const [photphoValue, setPhotphoValue] = useState('0');
-    const [isActive, setIsActive] = useState(false);
-    const [dataToPass, setDataToPass] = useState({
+    const [isActive, setIsActive] = useState(true);
+    const schedule = {
         startTime: start_time,
         endTime: end_time,
         nitorValue: nitorValue,
@@ -24,28 +24,48 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
         photphoValue: photphoValue,
         cycle: cycle,
         isActive: isActive
-    })
+    }
+    // const [dataToPass, setDataToPass] = useState({
+    //     startTime: start_time,
+    //     endTime: end_time,
+    //     nitorValue: nitorValue,
+    //     kaliValue: kaliValue,
+    //     photphoValue: photphoValue,
+    //     cycle: cycle,
+    //     isActive: isActive
+    // })
 
     const sendSchedule = () => {
-        setDataToPass({
-            startTime: start_time,
-            endTime: end_time,
-            nitorValue: nitorValue,
-            kaliValue: kaliValue,
-            photphoValue: photphoValue,
-            cycle: cycle,
-            isActive: true
-        });
+        // setDataToPass({
+        //     startTime: start_time,
+        //     endTime: end_time,
+        //     nitorValue: nitorValue,
+        //     kaliValue: kaliValue,
+        //     photphoValue: photphoValue,
+        //     cycle: cycle,
+        //     isActive: true
+        // });
         alert('Lịch tưới đã được kích hoạt và lưu lại');
+        schedule.startTime = start_time;
+        schedule.endTime = end_time;
+        schedule.nitorValue = nitorValue;
+        schedule.kaliValue = kaliValue;
+        schedule.photphoValue = photphoValue;
+        schedule.cycle = cycle;
+        schedule.isActive = isActive;
+
+        console.log("Send From ScheduleSetting to ScheduleStack");
+        onDataFromScheduleStack(schedule);
+
         //navigation.navigate('Schedule');
     }
 
-    useEffect(() => {
-        if (dataToPass.startTime != 'Null' && dataToPass.endTime != 'Null') {
-            console.log("Send From ScheduleSetting to ScheduleStack");
-            onDataFromScheduleStack(dataToPass);
-        }
-    }, [dataToPass]);
+    // useEffect(() => {
+    //     if (dataToPass.startTime != 'Null' && dataToPass.endTime != 'Null') {
+    //         console.log("Send From ScheduleSetting to ScheduleStack");
+    //         onDataFromScheduleStack(dataToPass);
+    //     }
+    // }, [dataToPass]);
 
     const onChange1 = (e, selectedDate) => {
 

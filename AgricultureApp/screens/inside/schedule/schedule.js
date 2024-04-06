@@ -9,7 +9,7 @@ export default function Schedule({ navigation, scheduleList, updateIsActive, rem
 
     //console.log('Data from ScheduleStack:', dataFromScheduleStack);
 
-    console.log('ScheduleList: ', scheduleList);
+    //console.log('ScheduleList: ', scheduleList);
 
 
 
@@ -47,6 +47,7 @@ export default function Schedule({ navigation, scheduleList, updateIsActive, rem
                             scheduleList.map((item, index) => {
                                 return <Task key={index} schedule={item} index={index} updateIsActive={handlUpdateIsActive} removeSchedule={handleRemoveSchedule} />
                             })
+
                         }
                     </ScrollView>
                 </View>

@@ -2,30 +2,45 @@ import { useState, useEffect, useContext } from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ScheduleSetting from './scheduleSetting';
 import Schedule from './schedule';
-import { MqttContext } from '../../../dataProvider';
+import { useMqtt } from "../../../dataProvider";
 const Stack = createNativeStackNavigator()
 
+const payload_schedule = {
+    station_id: "SCHEDULE_0001",
+    station_name: "Lich tuoi",
+    gps_longitude: 106.89,
+    gps_latitude: 10.5,
+    schedule_list: []
+}
+
 const ScheduleStack = () => {
-    const dataReceived = useContext(MqttContext);
-    console.log('Data to Schedule', dataReceived);
+
+    const { updateData, messageSchedulelist } = useMqtt();
 
 
-    const [scheduleList, setScheduleList] = useState([]);
+    const [scheduleList, setScheduleList] = useState(JSON.parse(messageSchedulelist).schedule_list);
+
+
+
 
     const handleAddSchedule = (schedule) => {
         setScheduleList([...scheduleList, schedule]);
     }
 
-
-
     const handleIsActive = (isActive, index) => {
         if (scheduleList.length === 0) {
-            console.log('Mang rong');
+            console.log('Mang rong is');
         } else {
-            scheduleList[index].isActive = isActive;
-            console.log('Index:', index);
-            console.log('IsActive update at ScheduleStack: ', scheduleList[index].isActive);
-            dataReceived.updateSchedule(scheduleList);
+            if (isActive != scheduleList[index].isActive) {
+                scheduleList[index].isActive = isActive;
+                console.log('Index:', index);
+                console.log('IsActive update at ScheduleStack: ', scheduleList[index].isActive);
+
+                payload_schedule.schedule_list = scheduleList;
+                console.log('Update isActive at ScheduleStack', payload_schedule);
+                updateData(payload_schedule);
+            }
+
         }
     }
 
@@ -33,16 +48,27 @@ const ScheduleStack = () => {
         if (scheduleList.length === 0) {
             console.log('Mang rong');
         } else {
+            console.log('Remove: ', index);
             const newList = [...scheduleList];
             newList.splice(index, 1);
+
+            payload_schedule.schedule_list = newList;
+            console.log('Update isActive at ScheduleStack', payload_schedule);
+            updateData(payload_schedule);
             setScheduleList(newList);
-            console.log('Remove: ', index);
         }
     }
 
+    // Update Schedule to Server
     useEffect(() => {
-        dataReceived.updateSchedule(scheduleList);
+        if (scheduleList.length != 0) {
+            payload_schedule.schedule_list = scheduleList;
+            updateData(payload_schedule);
+        }
+
     }, [scheduleList]);
+
+
 
     return (
         <Stack.Navigator initialRouteName="Schedule">

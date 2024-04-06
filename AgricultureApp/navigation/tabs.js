@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from '../screens/outside/login';
 import Register from '../screens/outside/register';
@@ -11,53 +11,61 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, Text } from 'react-native';
 import ScheduleStack from '../screens/inside/schedule/scheduleStack';
+import ScreenTest from '../ScreenTest';
 
 const Tab = createBottomTabNavigator();
+import { useMqtt } from '../dataProvider';
 
 function Tabs() {
+
+
   return (
-    <NavigationContainer>
-      <MqttProvider>
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false,
-            tabBarStyle: styles.container,
-            tabBarActiveTintColor: '#FFD826',
-            tabBarInactiveTintColor: 'white',
-            tabBarLabelStyle: styles.text
+    <Tab.Navigator
+      initialRouteName="Monitor"
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: styles.container,
+        tabBarActiveTintColor: '#FFD826',
+        tabBarInactiveTintColor: 'white',
+        tabBarLabelStyle: styles.text
+      }}
 
-          }}
+    >
+      <Tab.Screen
+        name="Monitor"
+        component={Monitor}
+        options={{
+          title: 'Trang chủ',
+          tabBarIcon: ({ color }) => <Feather name="home" size={24} color="white" />,
 
-        >
-          <Tab.Screen
-            name="Monitor"
-            component={Monitor}
-            options={{
-              title: 'Trang chủ',
-              tabBarIcon: ({ color }) => <Feather name="home" size={24} color="white" />,
+        }}
+      />
+      <Tab.Screen
+        name="Controller"
+        component={Controller}
+        options={{
+          title: 'Điều khiển',
+          tabBarIcon: ({ color }) => <AntDesign name="setting" size={24} color="white" />
+        }}
+      />
+      <Tab.Screen
+        name="ScheduleStack"
+        component={ScheduleStack}
+        options={{
+          title: 'Lập lịch',
+          tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="white" />
+        }}
+      />
+      {/* <Tab.Screen
+        name="ScreenTest"
+        component={ScreenTest}
+        options={{
+          title: 'ScreenTest',
+          tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="white" />
+        }}
+      /> */}
+    </Tab.Navigator>
 
-            }}
-          />
-          <Tab.Screen
-            name="Controller"
-            component={Controller}
-            options={{
-              title: 'Điều khiển',
-              tabBarIcon: ({ color }) => <AntDesign name="setting" size={24} color="white" />
-            }}
-          />
-          <Tab.Screen
-            name="ScheduleStack"
-            component={ScheduleStack}
-            options={{
-              title: 'Lập lịch',
-              tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="white" />
-            }}
-          />
-
-        </Tab.Navigator>
-      </MqttProvider>
-    </NavigationContainer>
   );
 }
 

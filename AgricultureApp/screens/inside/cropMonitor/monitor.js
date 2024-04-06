@@ -3,16 +3,11 @@ import { useState, useEffect, useContext } from "react";
 import { Modal, Text, Animated, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { useNavigation } from '@react-navigation/native';
-import { MqttContext } from '../../../dataProvider'
+import { useMqtt } from "../../../dataProvider";
 import { theme } from '../../../theme/index';
 
 import styles from './styleMonitor';
 
-// client = new Paho.Client(
-//  "mqttserver.tk",
-//   Number(9001),"/mqtt",
-//   "mqtt-tester"
-// );
 
 export default function Monitor() {
     const navigation = useNavigation();
@@ -26,8 +21,10 @@ export default function Monitor() {
     const [valueTemp, setValueTemp] = useState([1, 2, 3, 4, 5]);
     const [labelTemp, setLabelTemp] = useState(['1', '2', '3', '4', '5']);
     const [valueHumi, setValueHumi] = useState([1, 2, 3, 4, 5]);
-    const dataReceived = useContext(MqttContext);
-    console.log('Data to monitor:', dataReceived)
+
+    const { messageMonitoring } = useMqtt();
+    //const [dataSensor, setDataSensor] = useState((messageMonitoring != '') ? JSON.parse(messageMonitoring) : 'null');
+    //console.log('Data to monitor:', JSON.parse(messageMonitoring));
 
 
 
@@ -40,20 +37,6 @@ export default function Monitor() {
     };
 
 
-
-    // useEffect(() => {
-    //   client.connect({
-    //   onSuccess: onConnect,
-    //   mqttVersion: 3,
-    //   useSSL: false,
-    //   keepAliveInterval:3000,
-    //   userName : "innovation",
-    //   password : "Innovation_RgPQAZoA5N",
-    //   onFailure: () => {
-    //     console.log("Failed to connect!"); 
-    //   }
-    //   });
-    // }, [])
 
     const handleLogout = () => {
         // client.disconnect()
@@ -117,10 +100,10 @@ export default function Monitor() {
     // }
 
     const dataTemp = {
-        labels: dataReceived.labelTemp.slice(-7),
+        labels: labelTemp.slice(-7),
         datasets: [
             {
-                data: dataReceived.valueTemp,
+                data: valueTemp,
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 strokeWidth: 2,
                 // backgroundColor: 'rgba(255, 255, 255, 1)',
@@ -129,10 +112,10 @@ export default function Monitor() {
     };
 
     const dataHumi = {
-        labels: dataReceived.labelTemp.slice(-7),
+        labels: labelTemp.slice(-7),
         datasets: [
             {
-                data: dataReceived.valueHumi,
+                data: valueHumi,
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 strokeWidth: 2,
                 // backgroundColor: 'rgba(255, 255, 255, 1)',

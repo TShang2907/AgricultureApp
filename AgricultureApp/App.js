@@ -1,15 +1,18 @@
 import * as React from 'react';
-import AppNavigation from './navigation/navigation';
+//import AppNavigation from './navigation/navigation';
 import Tabs from './navigation/tabs';
-
+import MqttProvider from './dataProvider.js'
+import { NavigationContainer } from '@react-navigation/native';
 
 function App() {
 
   return (
 
-    //<AppNavigation />
-    <Tabs />
-
+    <MqttProvider>
+      <NavigationContainer>
+        <Tabs />
+      </NavigationContainer>
+    </MqttProvider>
   );
 
 }

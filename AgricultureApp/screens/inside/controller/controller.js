@@ -3,56 +3,100 @@ import Paho from "paho-mqtt";
 import { Modal, Text, Animated, View, TouchableOpacity, Image, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from "./styleController";
-import { MqttContext } from '../../../dataProvider'
-// client2 = new Paho.Client(
-//  "mqttserver.tk",
-//   Number(9001),"/mqtt",
-//   "mqtt-tester2"
-// );
+import { useMqtt } from "../../../dataProvider";
 
+// Van trộn dung dịch dinh dưỡng
+const payload_valve = {
+  station_id: "VALVE_0001",
+  station_name: "Van dien tu",
+  gps_longitude: 106.89,
+  gps_latitude: 10.5,
+  sensors: [
+    { sensor_id: "valve_0001", sensor_name: "Van nuoc 1", sensor_value: 0, sensor_unit: "" },
+    { sensor_id: "valve_0002", sensor_name: "Van nuoc 2", sensor_value: 0, sensor_unit: "" },
+    { sensor_id: "valve_003", sensor_name: "Van nuoc 3", sensor_value: 0, sensor_unit: "" }
+  ]
+};
+
+// Máy bơm và phân khu
+const payload_pump = {
+  station_id: "PUMP_0001",
+  station_name: "He Thong Bom",
+  gps_longitude: 106.89,
+  gps_latitude: 10.5,
+  sensors: [
+    { sensor_id: "pump_0001", sensor_name: "Phan khu 1", sensor_value: 0, sensor_unit: "" },
+    { sensor_id: "pump_0002", sensor_name: "Phan khu 2", sensor_value: 0, sensor_unit: "" },
+    { sensor_id: "pump_0003", sensor_name: "Phan khu 3", sensor_value: 0, sensor_unit: "" },
+    { sensor_id: "pump_0004", sensor_name: "Phan khu 4", sensor_value: 0, sensor_unit: "" },
+    { sensor_id: "pump_0005", sensor_name: "Phan khu 5", sensor_value: 0, sensor_unit: "" }
+  ]
+
+}
 export default function Controller() {
   const navigation = useNavigation();
   const translateX = new Animated.Value(-400);
   const [isMenuVisible, setMenuVisible] = useState(false);
 
-  const dataReceived = useContext(MqttContext);
-
-  console.log('Data to Controller', dataReceived);
+  const { updateData, messageValvecontroller, messagePumpcontroller } = useMqtt();
+  console.log('messageValvecontroller', JSON.parse(messageValvecontroller));
+  console.log('messagePumpcontroller', JSON.parse(messagePumpcontroller));
 
   //Valve
-  const [isEnabled1, setIsEnabled1] = useState(dataReceived.isEnabled1);
-  const [isEnabled2, setIsEnabled2] = useState(dataReceived.isEnabled2);
+  const [isEnabled1, setIsEnabled1] = useState(JSON.parse(messageValvecontroller).sensors[0].sensor_value);
+  //const [isEnabled1, setIsEnabled1] = useState(false);
+
+  const [isEnabled2, setIsEnabled2] = useState(JSON.parse(messageValvecontroller).sensors[1].sensor_value);
+  //const [isEnabled2, setIsEnabled2] = useState(false);
+
   const [isEnabled3, setIsEnabled3] = useState(false);
-  //Selector
+
+  //Pump
   const [isEnabled4, setIsEnabled4] = useState(false);
   const [isEnabled5, setIsEnabled5] = useState(false);
   const [isEnabled6, setIsEnabled6] = useState(false);
-  //Pump
-  const [isEnabled7, setIsEnabled7] = useState(dataReceived.isEnabled7);
-  const [isEnabled8, setIsEnabled8] = useState(dataReceived.isEnabled8);
+  //const [isEnabled7, setIsEnabled7] = useState(false);
+  const [isEnabled7, setIsEnabled7] = useState(JSON.parse(messagePumpcontroller).sensors[3].sensor_value);
+  //const [isEnabled8, setIsEnabled8] = useState(false);
+  const [isEnabled8, setIsEnabled8] = useState(JSON.parse(messagePumpcontroller).sensors[4].sensor_value);
 
+  //Update Valvecontroller to server
+
+  //isEnabled1
   useEffect(() => {
     console.log('isEnabled1: ', isEnabled1);
-    //dataReceived.updateData(isEnabled1, 0);
+
+    payload_valve.sensors[0].sensor_value = Number(isEnabled1);
+    updateData(payload_valve);
   }, [isEnabled1]);
 
+  //isEnabled2
   useEffect(() => {
     console.log('isEnabled2: ', isEnabled2);
-    //dataReceived.updateData(isEnabled2, 1);
+
+    payload_valve.sensors[1].sensor_value = Number(isEnabled2);
+    updateData(payload_valve);
   }, [isEnabled2]);
 
+  //Update Pumpcontroller to server
+
+  //isEnabled7
   useEffect(() => {
     console.log('isEnabled7: ', isEnabled7);
-    //dataReceived.updateData(isEnabled7, 3);
+
+    payload_pump.sensors[3].sensor_value = Number(isEnabled7);
+    updateData(payload_pump);
   }, [isEnabled7]);
 
+  // isEnabled8
   useEffect(() => {
     console.log('isEnabled8: ', isEnabled8);
-    //dataReceived.updateData(isEnabled8, 4);
+    payload_pump.sensors[4].sensor_value = Number(isEnabled8);
+    updateData(payload_pump);
   }, [isEnabled8]);
 
   //Valve
-  const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+  const toggleSwitch1 = () => { setIsEnabled1(previousState => !previousState) };
   const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
   const toggleSwitch3 = () => setIsEnabled3(previousState => !previousState);
   //Selector
