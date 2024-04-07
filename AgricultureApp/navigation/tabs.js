@@ -21,7 +21,6 @@ function Tabs() {
 
   return (
     <Tab.Navigator
-      initialRouteName="Monitor"
       screenOptions={{
         headerShown: false,
         tabBarStyle: styles.container,
@@ -31,6 +30,14 @@ function Tabs() {
       }}
 
     >
+      {/* <Tab.Screen
+        name="ScreenTest"
+        component={ScreenTest}
+        options={{
+          title: 'ScreenTest',
+          tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="white" />
+        }}
+      /> */}
       <Tab.Screen
         name="Monitor"
         component={Monitor}
@@ -56,14 +63,7 @@ function Tabs() {
           tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="white" />
         }}
       />
-      {/* <Tab.Screen
-        name="ScreenTest"
-        component={ScreenTest}
-        options={{
-          title: 'ScreenTest',
-          tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="white" />
-        }}
-      /> */}
+
     </Tab.Navigator>
 
   );

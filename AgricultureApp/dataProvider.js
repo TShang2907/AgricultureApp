@@ -14,6 +14,7 @@ const DataProvider = ({ children }) => {
   const [messageValvecontroller, setMessageValvecontroller] = useState('');
   const [messagePumpcontroller, setmessagePumpcontroller] = useState('');
   const [messageSchedulelist, setMessageSchedulelist] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     mqttClient.onConnectionLost = onConnectionLost;
@@ -41,6 +42,7 @@ const DataProvider = ({ children }) => {
       mqttClient.subscribe("/innovation/pumpcontroller/station");
       mqttClient.subscribe("/innovation/valvecontroller/schedulelist");
       console.log("Connected to MQTT server");
+
     }
   }
 
@@ -63,6 +65,7 @@ const DataProvider = ({ children }) => {
     // Monitoring
     if (message.destinationName == "/innovation/airmonitoring/NBIOTs") {
       setMessageMonitoring(message.payloadString);
+      setIsInitialized(true);
     }
     // Valecontroler
     if (message.destinationName == "/innovation/valvecontroller/station") {
@@ -105,7 +108,7 @@ const DataProvider = ({ children }) => {
   };
 
   return (
-    <MqttContext.Provider value={{ messageMonitoring, messageValvecontroller, messagePumpcontroller, messageSchedulelist, updateData }}>
+    <MqttContext.Provider value={{ isInitialized, messageMonitoring, messageValvecontroller, messagePumpcontroller, messageSchedulelist, updateData }}>
       {children}
     </MqttContext.Provider>
   );

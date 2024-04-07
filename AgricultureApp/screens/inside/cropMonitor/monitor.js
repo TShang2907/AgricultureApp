@@ -18,15 +18,55 @@ export default function Monitor() {
     const [kali, setKali] = useState(0);
     const [elec, setElec] = useState(0);
     const [pH, setPH] = useState(0);
-    const [valueTemp, setValueTemp] = useState([1, 2, 3, 4, 5]);
-    const [labelTemp, setLabelTemp] = useState(['1', '2', '3', '4', '5']);
-    const [valueHumi, setValueHumi] = useState([1, 2, 3, 4, 5]);
+    const [valueTemp, setValueTemp] = useState([1, 2, 3]);
+    const [labelTemp, setLabelTemp] = useState(['1', '2', '3']);
+    const [valueHumi, setValueHumi] = useState([1, 2, 3,]);
 
-    const { messageMonitoring } = useMqtt();
-    //const [dataSensor, setDataSensor] = useState((messageMonitoring != '') ? JSON.parse(messageMonitoring) : 'null');
-    //console.log('Data to monitor:', JSON.parse(messageMonitoring));
+    const { isInitialized, messageMonitoring } = useMqtt();
+    //const [isStart, setIsStart] = useState(isInitialized);
+    const [dataSensor, setDataSensor] = useState('');
 
+    useEffect(() => {
+        if (isInitialized) {
+            setDataSensor(JSON.parse(messageMonitoring));
+        }
+    }, [isInitialized]);
 
+    useEffect(() => {
+        if (dataSensor !== '') {
+            console.log('Data to monitor', dataSensor);
+
+            if (valueTemp.length == 7) {
+                let tempList = [...valueTemp];
+                tempList.shift();
+                setValueTemp(tempList)
+            }
+            if (labelTemp.length == 7) {
+                let labelTempList = [...labelTemp];
+                labelTempList.shift();
+                setLabelTemp(labelTempList)
+            }
+            if (valueHumi.length == 7) {
+                let humiList = [...valueHumi];
+                humiList.shift();
+                setValueHumi(humiList)
+            }
+            var timeTemp = new Date();
+            setValueTemp([...valueTemp, dataSensor.sensors[0].value]);
+            setValueHumi([...valueHumi, dataSensor.sensors[1].value]);
+            setLabelTemp([...labelTemp, timeTemp.getHours().toString() + ':' + timeTemp.getMinutes().toString()]);
+
+            console.log(labelTemp)
+            console.log(valueTemp)
+
+            setPH(dataSensor.sensors[4].value)
+            setElec(dataSensor.sensors[5].value)
+            setNitro(dataSensor.sensors[6].value)
+            setPhotpho(dataSensor.sensors[7].value)
+            setKali(dataSensor.sensors[8].value)
+
+        }
+    }, [dataSensor]);
 
     const openMenu = () => {
         setMenuVisible(true);
@@ -56,48 +96,6 @@ export default function Monitor() {
 
 
     // handleChangeScreen().then(navigation.navigate('Controller'))
-
-    // function onConnect(){
-    //   console.log("onConnect");
-    //   client.subscribe("/innovation/airmonitoring/station");
-    //   client.subscribe("/innovation/soilmonitoring/station");
-    //   client.onMessageArrived = onMessage;
-    // }
-
-    //   function onMessage(message) {
-    //   if(message.topic == '/innovation/airmonitoring/station'){
-    //     if(valueTemp.length == 7){
-    //       let tempList = [...valueTemp];
-    //       tempList.shift();
-    //       setValueTemp(tempList)  
-    //     }
-    //     if(labelTemp.length == 7){
-    //       let labelTempList = [...labelTemp];
-    //       labelTempList.shift();
-    //       setLabelTemp(labelTempList)
-    //     }
-    //     if(valueHumi.length == 7){
-    //       let humiList = [...valueHumi];
-    //       humiList.shift();
-    //       setValueHumi(humiList)     
-    //     }
-    //     var timeTemp = new Date();
-    //     setValueTemp(prevValue => [...prevValue, JSON.parse(message.payloadString).sensors[0].sensor_value]);
-    //     setValueHumi(prevValue => [...prevValue, JSON.parse(message.payloadString).sensors[1].sensor_value]);
-    //     setLabelTemp(prevValue => [...prevValue, timeTemp.getHours().toString() + ':' + timeTemp.getMinutes().toString()]);
-
-    //     console.log(labelTemp) 
-    //     console.log(valueTemp)
-    //   }
-
-    //   if(message.topic == '/innovation/soilmonitoring/station'){
-    //     setNitro(JSON.parse(message.payloadString).sensors[4].sensor_value)
-    //     setPhotpho(JSON.parse(message.payloadString).sensors[5].sensor_value)
-    //     setKali(JSON.parse(message.payloadString).sensors[6].sensor_value)
-    //     setPH(JSON.parse(message.payloadString).sensors[2].sensor_value)
-    //     setElec(JSON.parse(message.payloadString).sensors[3].sensor_value)      
-    //   }
-    // }
 
     const dataTemp = {
         labels: labelTemp.slice(-7),
@@ -181,7 +179,7 @@ export default function Monitor() {
                             }}
                         />
                         <View style={styles.tempChart}>
-                            <Text style={styles.nhietDo}>Nhiệt độ: 32 'C</Text>
+                            <Text style={styles.nhietDo}>Nhiệt độ</Text>
                         </View>
                     </View>
                 </View>
@@ -216,7 +214,7 @@ export default function Monitor() {
                             }}
                         />
                         <View style={styles.tempChart}>
-                            <Text style={styles.nhietDo}>Độ ẩm: 55%</Text>
+                            <Text style={styles.nhietDo}>Độ ẩm</Text>
                         </View>
                     </View>
                 </View>
@@ -258,9 +256,6 @@ export default function Monitor() {
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.pageListComponent} onPress={handleChangeScreen}>
                                 <Text style={styles.pageListText}>Điều khiển công tắc</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.pageListComponent} onPress={handleChangeScreen1}>
-                                <Text style={styles.pageListText}>Screen test</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.logoutArea}>
