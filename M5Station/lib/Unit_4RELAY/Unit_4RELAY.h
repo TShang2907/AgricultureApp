@@ -12,19 +12,20 @@
 #include <Wire.h>
 #include "pins_arduino.h"
 
-#define UNIT_4RELAY_ADDR      0X26
-#define UNIT_4RELAY_REG       0X10
+#define UNIT_4RELAY_ADDR 0X26
+#define UNIT_4RELAY_REG 0X10
 #define UNIT_4RELAY_RELAY_REG 0X11
 
-class UNIT_4RELAY {
-   private:
+class UNIT_4RELAY
+{
+private:
     TwoWire *_wire;
     uint8_t _sda;
     uint8_t _scl;
     void write1Byte(uint8_t address, uint8_t register_address, uint8_t data);
     uint8_t read1Byte(uint8_t address, uint8_t register_address);
 
-   public:
+public:
     bool begin(TwoWire *wire = &Wire, uint8_t sda = SDA, uint8_t scl = SCL);
     void Init(bool mode);
 
