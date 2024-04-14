@@ -3,15 +3,18 @@
 #include "MQTT.h"
 #include "Unit_4RELAY.h"
 #include <ArduinoJson.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 
-#define SSID_WIFI "OPPO K3"
-#define PASS_WIFI "29072001"
+#define SSID_WIFI "HUYNH NGOC"
+#define PASS_WIFI "HN200912@"
 #define MQTT_SERVER "mqttserver.tk"
 #define USERNAME "innovation"
 #define PASSWORD "Innovation_RgPQAZoA5N"
 #define VALVE_TOPIC "/innovation/valvecontroller/station"
 #define PUMP_TOPIC "/innovation/pumpcontroller/station"
 #define SENSOR_DATA_TOPIC "/innovation/airmonitoring/NBIOTs"
+#define SCHEDULE_TOPIC "/innovation/valvecontroller/schedulelist"
 #define BUFFER_SIZE 2048
 // Class 4 Relay
 UNIT_4RELAY relay;
@@ -24,7 +27,12 @@ StaticJsonDocument<100> valve_json;
 StaticJsonDocument<100> pump_json;
 uint8_t relayArray[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 bool isFirst = true;
+bool isSchedule = false;
+unsigned long countTime = 0;
 TaskHandle_t schedule = NULL;
+const long utcOffsetInSeconds = 7 * 3600; // Điều chỉnh múi giờ (nếu cần) UTC+7
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
 /////////////////////////////////////////////////////////////////////////////////
 
 // Setup wifi
@@ -41,12 +49,43 @@ void setupWifi()
   }
   M5.Lcd.printf("\nSuccessful Wifi connection\n");
 }
+// task
+void taskSchedule(void *pvParameters)
+{
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = 1000 / portTICK_PERIOD_MS; // Độ trễ giữa các lần thực thi (5000ms)
+  xLastWakeTime = xTaskGetTickCount();                     // Lấy thời gian hiện tại
 
+  // Lấy thời gian hiện tại và in ra
+  timeClient.update();
+  unsigned long timeCurrent = timeClient.getHours() * 60 + timeClient.getMinutes();
+  Serial.print("Current time: ");
+  Serial.println(timeCurrent);
+
+  // Lấy thời gian bắt đầu
+  String strTimeStart = doc["schedule_list"][0]["startTime"];
+
+  unsigned long timeStart = strTimeStart.substring(0, 2).toInt() * 60 + strTimeStart.substring(3).toInt();
+  Serial.println("Start time: ");
+  Serial.println(timeStart);
+
+  countTime = timeCurrent - timeStart;
+  while (countTime > 0)
+  {
+    Serial.println("Count time: ");
+    Serial.println(countTime);
+    vTaskDelay(xFrequency);
+    (countTime)--;
+  }
+  isSchedule = true;
+  vTaskDelete(schedule);
+}
 // Function Receive Data From MQTT Broker
 void myReceiveFunction(char *topic, byte *payload, unsigned int length)
 {
   M5.Lcd.println(topic);
-  // Convert data to string
+  // isSchedule = true;
+  //  Convert data to string
   char *data_sensor = reinterpret_cast<char *>(payload);
   //  Deserialize the JSON document
   DeserializationError error = deserializeJson(doc, data_sensor);
@@ -62,6 +101,7 @@ void myReceiveFunction(char *topic, byte *payload, unsigned int length)
 
   if (doc["station_id"] == "VALVE_0001")
   {
+
     deserializeJson(valve_json, data_sensor);
     if (isFirst == false)
     {
@@ -78,11 +118,16 @@ void myReceiveFunction(char *topic, byte *payload, unsigned int length)
   }
   else if (doc["station_id"] == "air_0002")
   {
+
     deserializeJson(sensors_json, data_sensor);
     if (isFirst == false)
     {
       serializeJson(sensors_json, Serial1);
     }
+  }
+  else if (doc["station_id"] == "SCHEDULE_0001")
+  {
+    xTaskCreatePinnedToCore(taskSchedule, "taskSchedule", 4096, NULL, 1, &schedule, 0);
   }
 }
 
@@ -102,12 +147,12 @@ char *returnMessage()
   return receivedData; // Trả về con trỏ đến mảng kí tự
 }
 
-// task
-void taskSchedule(void *pvParameters)
+// task2
+void task2(void *pvParameters)
 {
   while (true)
   {
-    Serial.print("Task schedule: ");
+    Serial.print("Task2");
     Serial.println(millis());
     delay(1000);
   }
@@ -120,12 +165,16 @@ void setup()
   // Initialize M5Station.
   M5.begin();
   // task
-  xTaskCreatePinnedToCore(taskSchedule, "taskSchedule", 4096, NULL, 1, NULL, 0);
-  // Setup UART 1
+
+  // xTaskCreatePinnedToCore(task2, "task2", 4096, NULL, 1, NULL, 0);
+  //  Setup UART 1
   Serial1.begin(115200, SERIAL_8N1, 13, 14);
 
   // Initialize Wifi
   setupWifi();
+
+  // Bắt đầu lấy thời gian từ máy chủ NTP
+  timeClient.begin();
 
   // Connect to MQTT Broker
   if (mqtt.connectToMQTT())
@@ -143,6 +192,8 @@ void setup()
   mqtt.subscribe(PUMP_TOPIC);
   // Subscribe to MONITOR
   mqtt.subscribe(SENSOR_DATA_TOPIC);
+  // Subscribe to SCHEDULE_TOPIC
+  mqtt.subscribe(SCHEDULE_TOPIC);
 
   // Set Receive Function Mqtt
   mqtt.setReceiveFunction(myReceiveFunction);
@@ -189,15 +240,18 @@ void loop()
   }
 
   mqtt.checkConnect(); // Check connected mqtt
-
   // M5.update(); // Update state button
   // if (M5.BtnA.wasPressed())
   // {
   //   serializeJson(doc, Serial1);
   //   M5.Lcd.println("Send data successfully");
   // }
+  if (isSchedule)
+  {
+    Serial.print("Relay\n");
+    isSchedule = false;
+  }
 
-  Serial.print("Main");
-  Serial.println(millis());
+  // Serial.println(millis());
   // delay(2000);
 }
