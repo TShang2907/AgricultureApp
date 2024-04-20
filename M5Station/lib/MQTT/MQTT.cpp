@@ -10,7 +10,7 @@ bool MyMQTT::subscribe(const char *feedName)
 }
 bool MyMQTT::publish(const char *topic, const char *payload)
 {
-    return client.publish(topic, payload);
+    return client.publish(topic, payload, true);
 }
 void MyMQTT::checkConnect()
 {

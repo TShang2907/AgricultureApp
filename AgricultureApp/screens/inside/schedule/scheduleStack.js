@@ -20,11 +20,20 @@ const ScheduleStack = () => {
 
     const [scheduleList, setScheduleList] = useState(JSON.parse(messageSchedulelist).schedule_list);
 
+    useEffect(() => {
+        setScheduleList(JSON.parse(messageSchedulelist).schedule_list);
+    }, [messageSchedulelist]);
+
 
 
 
     const handleAddSchedule = (schedule) => {
-        setScheduleList([...scheduleList, schedule]);
+        console.log('Schedule Update from server', scheduleList);
+        const newList = [...scheduleList, schedule];
+        payload_schedule.schedule_list = newList;
+        console.log('Add schedule');
+        updateData(payload_schedule);
+        setScheduleList(newList);
     }
 
     const handleIsActive = (isActive, index) => {
@@ -59,14 +68,14 @@ const ScheduleStack = () => {
         }
     }
 
-    // Update Schedule to Server
-    useEffect(() => {
-        if (scheduleList.length != 0) {
-            payload_schedule.schedule_list = scheduleList;
-            updateData(payload_schedule);
-        }
+    // // Update Schedule to Server
+    // useEffect(() => {
+    //     if (scheduleList.length != 0) {
+    //         payload_schedule.schedule_list = scheduleList;
+    //         updateData(payload_schedule);
+    //     }
 
-    }, [scheduleList]);
+    // }, [scheduleList]);
 
 
 

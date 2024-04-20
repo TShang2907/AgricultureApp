@@ -24,6 +24,16 @@ const Task = (props) => {
 
     }, [isEnabled]);
 
+    useEffect(() => {
+        if (props.schedule.status == "RUNNING") {
+            setStatus('Đang tưới')
+        } else if (props.schedule.status == "DONE") {
+            setStatus('Đã tưới')
+        } else if (props.schedule.status == "WAITING") {
+            setStatus('Đang chờ tưới')
+        }
+    }, [props.schedule.status]);
+
     // const [cycle, setCycle] = useState(0);
     // const [startTime, setStartTime] = useState('null');
     // const [endTime, setEndTime] = useState('null');

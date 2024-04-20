@@ -16,14 +16,17 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
     const [kaliValue, setKaliValue] = useState('0');
     const [photphoValue, setPhotphoValue] = useState('0');
     const [isActive, setIsActive] = useState(true);
+    const [status, setStatus] = useState('WAITING');
     const schedule = {
         startTime: start_time,
         endTime: end_time,
-        nitorValue: nitorValue,
-        kaliValue: kaliValue,
-        photphoValue: photphoValue,
-        cycle: cycle,
-        isActive: isActive
+        nitorValue: parseInt(nitorValue),
+        kaliValue: parseInt(kaliValue),
+        photphoValue: parseInt(photphoValue),
+        cycle: parseInt(cycle),
+        isActive: isActive,
+        status: status
+
     }
     // const [dataToPass, setDataToPass] = useState({
     //     startTime: start_time,
@@ -48,11 +51,12 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
         alert('Lịch tưới đã được kích hoạt và lưu lại');
         schedule.startTime = start_time;
         schedule.endTime = end_time;
-        schedule.nitorValue = nitorValue;
-        schedule.kaliValue = kaliValue;
-        schedule.photphoValue = photphoValue;
-        schedule.cycle = cycle;
+        schedule.nitorValue = parseInt(nitorValue);
+        schedule.kaliValue = parseInt(kaliValue);
+        schedule.photphoValue = parseInt(photphoValue);
+        schedule.cycle = parseInt(cycle);
         schedule.isActive = isActive;
+        schedule.status = 'WAITING';
 
         console.log("Send From ScheduleSetting to ScheduleStack");
         onDataFromScheduleStack(schedule);

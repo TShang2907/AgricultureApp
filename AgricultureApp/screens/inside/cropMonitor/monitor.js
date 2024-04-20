@@ -18,37 +18,38 @@ export default function Monitor() {
     const [kali, setKali] = useState(0);
     const [elec, setElec] = useState(0);
     const [pH, setPH] = useState(0);
-    const [valueTemp, setValueTemp] = useState([1, 2, 3]);
-    const [labelTemp, setLabelTemp] = useState(['1', '2', '3']);
-    const [valueHumi, setValueHumi] = useState([1, 2, 3,]);
+    const [valueTemp, setValueTemp] = useState([0]);
+    const [labelTemp, setLabelTemp] = useState([0]);
+    const [valueHumi, setValueHumi] = useState([0]);
 
     const { isInitialized, messageMonitoring } = useMqtt();
     //const [isStart, setIsStart] = useState(isInitialized);
     const [dataSensor, setDataSensor] = useState('');
 
     useEffect(() => {
-        if (isInitialized) {
+        if (messageMonitoring != '') {
             setDataSensor(JSON.parse(messageMonitoring));
         }
-    }, [isInitialized]);
+    }, [messageMonitoring]);
 
     useEffect(() => {
         if (dataSensor !== '') {
             console.log('Data to monitor', dataSensor);
 
-            if (valueTemp.length == 7) {
+            if (valueTemp.length == 10) {
                 let tempList = [...valueTemp];
-                tempList.shift();
+                const newList = [...scheduleList];
+                tempList.splice(0, 1);
                 setValueTemp(tempList)
             }
-            if (labelTemp.length == 7) {
+            if (labelTemp.length == 10) {
                 let labelTempList = [...labelTemp];
-                labelTempList.shift();
+                labelTempList.splice(0, 1);
                 setLabelTemp(labelTempList)
             }
-            if (valueHumi.length == 7) {
+            if (valueHumi.length == 10) {
                 let humiList = [...valueHumi];
-                humiList.shift();
+                humiList.splice(0, 1);
                 setValueHumi(humiList)
             }
             var timeTemp = new Date();
