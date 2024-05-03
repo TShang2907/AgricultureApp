@@ -28,26 +28,11 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
         status: status
 
     }
-    // const [dataToPass, setDataToPass] = useState({
-    //     startTime: start_time,
-    //     endTime: end_time,
-    //     nitorValue: nitorValue,
-    //     kaliValue: kaliValue,
-    //     photphoValue: photphoValue,
-    //     cycle: cycle,
-    //     isActive: isActive
-    // })
+
 
     const sendSchedule = () => {
-        // setDataToPass({
-        //     startTime: start_time,
-        //     endTime: end_time,
-        //     nitorValue: nitorValue,
-        //     kaliValue: kaliValue,
-        //     photphoValue: photphoValue,
-        //     cycle: cycle,
-        //     isActive: true
-        // });
+
+
         alert('Lịch tưới đã được kích hoạt và lưu lại');
         schedule.startTime = start_time;
         schedule.endTime = end_time;

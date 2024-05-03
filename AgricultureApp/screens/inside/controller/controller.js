@@ -14,7 +14,7 @@ const payload_valve = {
   sensors: [
     { sensor_id: "valve_0001", sensor_name: "Van nuoc 1", sensor_value: 0, sensor_unit: "" },
     { sensor_id: "valve_0002", sensor_name: "Van nuoc 2", sensor_value: 0, sensor_unit: "" },
-    { sensor_id: "valve_003", sensor_name: "Van nuoc 3", sensor_value: 0, sensor_unit: "" }
+    { sensor_id: "valve_0003", sensor_name: "Van nuoc 3", sensor_value: 0, sensor_unit: "" }
   ]
 };
 
@@ -38,9 +38,12 @@ export default function Controller() {
   const translateX = new Animated.Value(-400);
   const [isMenuVisible, setMenuVisible] = useState(false);
 
+  const [isFirstValve, setIsFirstValve] = useState(true);
+  const [isFirstPump, setIsFirstPump] = useState(true);
+
   const { updateData, messageValvecontroller, messagePumpcontroller } = useMqtt();
-  console.log('messageValvecontroller', JSON.parse(messageValvecontroller));
-  console.log('messagePumpcontroller', JSON.parse(messagePumpcontroller));
+  //console.log('messageValvecontroller', JSON.parse(messageValvecontroller));
+  //console.log('messagePumpcontroller', JSON.parse(messagePumpcontroller));
 
   //Valve
   const [isEnabled1, setIsEnabled1] = useState(JSON.parse(messageValvecontroller).sensors[0].sensor_value);
@@ -61,13 +64,25 @@ export default function Controller() {
   const [isEnabled8, setIsEnabled8] = useState(JSON.parse(messagePumpcontroller).sensors[4].sensor_value);
 
   //Update Valvecontroller to server
+  useEffect(() => {
+    setIsFirstValve(false);
+  }, [messageValvecontroller]);
+  //Update Valvecontroller to server
+  useEffect(() => {
+    setIsFirstPump(false);
+  }, [messagePumpcontroller]);
+
 
   //isEnabled1
   useEffect(() => {
     console.log('isEnabled1: ', isEnabled1);
 
     payload_valve.sensors[0].sensor_value = Number(isEnabled1);
-    updateData(payload_valve);
+    if (isFirstValve == false) {
+      updateData(payload_valve);
+      console.log('Send isEnabled1: ', isEnabled1);
+    }
+
   }, [isEnabled1]);
 
   //isEnabled2
@@ -75,7 +90,10 @@ export default function Controller() {
     console.log('isEnabled2: ', isEnabled2);
 
     payload_valve.sensors[1].sensor_value = Number(isEnabled2);
-    updateData(payload_valve);
+    if (isFirstValve == false) {
+      updateData(payload_valve);
+      console.log('Send isEnabled2: ', isEnabled1);
+    }
   }, [isEnabled2]);
 
   //Update Pumpcontroller to server
@@ -85,14 +103,20 @@ export default function Controller() {
     console.log('isEnabled7: ', isEnabled7);
 
     payload_pump.sensors[3].sensor_value = Number(isEnabled7);
-    updateData(payload_pump);
+    if (isFirstPump == false) {
+      updateData(payload_pump);
+      console.log('Send isEnabled7: ', isEnabled1);
+    }
   }, [isEnabled7]);
 
   // isEnabled8
   useEffect(() => {
     console.log('isEnabled8: ', isEnabled8);
     payload_pump.sensors[4].sensor_value = Number(isEnabled8);
-    updateData(payload_pump);
+    if (isFirstPump == false) {
+      updateData(payload_pump);
+      console.log('Send isEnabled8: ', isEnabled1);
+    }
   }, [isEnabled8]);
 
   //Valve

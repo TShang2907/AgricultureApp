@@ -18,13 +18,17 @@ export default function Monitor() {
     const [kali, setKali] = useState(0);
     const [elec, setElec] = useState(0);
     const [pH, setPH] = useState(0);
-    const [valueTemp, setValueTemp] = useState([0]);
-    const [labelTemp, setLabelTemp] = useState([0]);
-    const [valueHumi, setValueHumi] = useState([0]);
 
-    const { isInitialized, messageMonitoring } = useMqtt();
-    //const [isStart, setIsStart] = useState(isInitialized);
+    const [valueTemp, setValueTemp] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const [labelTemp, setLabelTemp] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const [valueHumi, setValueHumi] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const [predictTemp, setPredictTemp] = useState([30.8, 31.9, 33.0, 34.2, 35.3, 33.3, 34.3, 35.7, 35.8])
+    const [predictHumi, setPredictHumi] = useState([72.5, 65.0, 61.7, 61.3, 63.0, 59.3, 54.2, 53.1, 51.3])
+
+    const { messageMonitoring, sensorData, predictionData } = useMqtt();
     const [dataSensor, setDataSensor] = useState('');
+
+
 
     useEffect(() => {
         if (messageMonitoring != '') {
@@ -33,32 +37,56 @@ export default function Monitor() {
     }, [messageMonitoring]);
 
     useEffect(() => {
+        if (sensorData.length > 0) {
+            console.log("Data sensor:", sensorData);
+            const ArrayTime = sensorData[0].map((item) => {
+                const dateTimePart = item.split(" ");
+                const timeString = dateTimePart[1];
+                const timePart = timeString.split(":");
+                return `${timePart[0]}:${timePart[1]}`;
+            });
+
+            setLabelTemp(ArrayTime);
+            setValueTemp(sensorData[1]);
+            setValueHumi(sensorData[2]);
+        }
+    }, [sensorData]);
+
+    useEffect(() => {
+        if (predictionData.length > 0) {
+            console.log("Prediction Data:", predictionData);
+
+            setPredictTemp(predictionData[1]);
+            setPredictHumi(predictionData[2]);
+        }
+    }, [predictionData]);
+
+    useEffect(() => {
         if (dataSensor !== '') {
             console.log('Data to monitor', dataSensor);
+            // var timeTemp = new Date();
 
-            if (valueTemp.length == 10) {
-                let tempList = [...valueTemp];
-                const newList = [...scheduleList];
-                tempList.splice(0, 1);
-                setValueTemp(tempList)
-            }
-            if (labelTemp.length == 10) {
-                let labelTempList = [...labelTemp];
-                labelTempList.splice(0, 1);
-                setLabelTemp(labelTempList)
-            }
-            if (valueHumi.length == 10) {
-                let humiList = [...valueHumi];
-                humiList.splice(0, 1);
-                setValueHumi(humiList)
-            }
-            var timeTemp = new Date();
-            setValueTemp([...valueTemp, dataSensor.sensors[0].value]);
-            setValueHumi([...valueHumi, dataSensor.sensors[1].value]);
-            setLabelTemp([...labelTemp, timeTemp.getHours().toString() + ':' + timeTemp.getMinutes().toString()]);
 
-            console.log(labelTemp)
-            console.log(valueTemp)
+            // let tempList = [...valueTemp, dataSensor.sensors[0].value];
+            // tempList.splice(0, 1);
+
+            // setValueTemp(tempList);
+
+            // let labelTempList = [...labelTemp, timeTemp.getHours().toString() + ':' + timeTemp.getMinutes().toString()];
+            // labelTempList.splice(0, 1);
+
+            // setLabelTemp(labelTempList)
+
+            // let humiList = [...valueHumi, dataSensor.sensors[1].value];
+            // humiList.splice(0, 1);
+
+            // setValueHumi(humiList)
+
+
+            //setValueTemp([...valueTemp, dataSensor.sensors[0].value]);
+            //setValueHumi([...valueHumi, dataSensor.sensors[1].value]);
+            //setLabelTemp([...labelTemp, timeTemp.getHours().toString() + ':' + timeTemp.getMinutes().toString()]);
+
 
             setPH(dataSensor.sensors[4].value)
             setElec(dataSensor.sensors[5].value)
@@ -99,27 +127,48 @@ export default function Monitor() {
     // handleChangeScreen().then(navigation.navigate('Controller'))
 
     const dataTemp = {
-        labels: labelTemp.slice(-7),
+        labels: labelTemp.slice(-9),
         datasets: [
             {
                 data: valueTemp,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                strokeWidth: 2,
-                // backgroundColor: 'rgba(255, 255, 255, 1)',
+                color: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
+                strokeWidth: 4,
+
             },
+            {
+                data: predictTemp,
+                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                strokeWidth: 4,
+            }
         ],
+        labelStyle: {
+            color: 'white', // Màu chữ
+            fontSize: 3,   // Kích thước chữ
+        },
+
     };
 
     const dataHumi = {
-        labels: labelTemp.slice(-7),
+        labels: labelTemp.slice(-9),
         datasets: [
             {
                 data: valueHumi,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                strokeWidth: 2,
-                // backgroundColor: 'rgba(255, 255, 255, 1)',
+                color: (opacity = 1) => `rgba(255, 255, 255,${opacity})`,
+                strokeWidth: 3,
+
+            },
+
+            {
+                data: predictHumi,
+                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                strokeWidth: 3,
+
             },
         ],
+        labelStyle: {
+            color: 'white', // Màu chữ
+            fontSize: 3,   // Kích thước chữ
+        },
     };
 
     useEffect(() => {
@@ -154,29 +203,43 @@ export default function Monitor() {
                     <View style={styles.monitorLinechartBg}>
                         <LineChart
                             data={dataTemp}
-                            width={300}
-                            height={220}
-                            yAxisSuffix=" 'C"
+                            width={370}
+                            height={250}
+                            yAxisSuffix="°C"
                             yAxisInterval={1}
+                            // renderDotContent={({ x, y, index, value }) => (
+                            //     <Text
+                            //         key={index}
+                            //         x={x}
+                            //         y={y}
+                            //         fontWeight="bold"
+                            //         fontSize="14"
+                            //         fill="black"
+                            //         alignmentBaseline="middle"
+                            //         textAnchor="middle">
+                            //         {value}
+                            //     </Text>
+                            // )}
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 1)',
                                 backgroundGradientFrom: '#74c79d',
                                 backgroundGradientTo: '#74c79d',
                                 decimalPlaces: 2,
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
+
                                 style: {
-                                    borderRadius: 16
+                                    borderRadius: 20
                                 },
-                                propsForDots: {
-                                    r: "4",
-                                    strokeWidth: "2",
-                                }
+
                             }}
+
                             bezier
                             style={{
-                                marginVertical: 8,
-                                borderRadius: 10
+                                marginVertical: 12,
+                                marginHorizontal: 10,
+                                borderRadius: 17
                             }}
                         />
                         <View style={styles.tempChart}>
@@ -189,29 +252,36 @@ export default function Monitor() {
                     <View style={styles.monitorLinechartBg}>
                         <LineChart
                             data={dataHumi}
-                            width={300}
-                            height={220}
+                            width={370}
+                            height={250}
                             yAxisSuffix="%"
                             yAxisInterval={1}
+                            // getDotColor={(dataPoint, dataPointIndex) => {
+                            //     // Áp dụng điều kiện cho mỗi dãy dữ liệu
+                            //     if (dataPointIndex > 5) {
+                            //         // Dãy dữ liệu đầu tiên
+                            //         return 'red';
+                            //     } else {
+                            //         return 'yellow';
+                            //     }
+                            // }}
+
                             chartConfig={{
-                                backgroundColor: 'rgba(255, 255, 255, 1)',
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                                 backgroundGradientFrom: '#57CCED',
                                 backgroundGradientTo: '#57CCED',
                                 decimalPlaces: 2,
                                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 style: {
-                                    borderRadius: 16
+                                    borderRadius: 20
                                 },
-                                propsForDots: {
-                                    r: "4",
-                                    strokeWidth: "2",
-                                }
                             }}
                             bezier
                             style={{
-                                marginVertical: 8,
-                                borderRadius: 10
+                                marginVertical: 12,
+                                marginHorizontal: 10,
+                                borderRadius: 17
                             }}
                         />
                         <View style={styles.tempChart}>

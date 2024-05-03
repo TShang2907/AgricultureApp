@@ -46,17 +46,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 280,
-    width: 330,
-    backgroundColor: theme.bgWhite(0.15),
+    width: 400,
+    backgroundColor: 'transparent',//theme.bgWhite(0.15),
     borderRadius: 5
   },
   monitorLinechartBgArea: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    marginVertical: 15,
   },
   tempChart: {
-    height: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },

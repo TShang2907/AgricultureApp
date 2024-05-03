@@ -19,12 +19,16 @@ const ScheduleStack = () => {
 
 
     const [scheduleList, setScheduleList] = useState(JSON.parse(messageSchedulelist).schedule_list);
-
+    //const [indexSchedule, setIndexSchedule] = useState(0);
     useEffect(() => {
         setScheduleList(JSON.parse(messageSchedulelist).schedule_list);
     }, [messageSchedulelist]);
 
-
+    // useEffect(() => {
+    //     if (scheduleList.length > 0) {
+    //         setIndexSchedule(scheduleList.length)
+    //     }
+    // }, [scheduleList]);
 
 
     const handleAddSchedule = (schedule) => {
@@ -99,7 +103,7 @@ const ScheduleStack = () => {
                 options={{ headerShown: false }}>
                 {(props) => <ScheduleSetting
                     {...props}
-                    onDataFromScheduleStack={handleAddSchedule}//(data) => setDataFromScheduleSetting(data)}
+                    onDataFromScheduleStack={handleAddSchedule}
                 />}
             </Stack.Screen>
         </Stack.Navigator>
