@@ -1,8 +1,8 @@
 import requests
 
 # Đường dẫn đến Google Sheets
-sheet_id = '1A1V1pnv-MvBhynMW7rBfc0m5X6Cc3QmOssjgjzMl8j0'
-sheet_range = 'Trang tính2!C1:K12'  # Thay Sheet1 bằng tên sheet bạn muốn truy xuất
+sheet_id = '1qO1gqFsBra6mbL7lR1GeKLbJBeAL10zf1mfkAdoFPk0'
+sheet_range = 'RealData!C2:K16'  # Thay Sheet1 bằng tên sheet bạn muốn truy xuất
 
 # API key
 api_key = 'AIzaSyCGQxAPIFmR03S3CbNDtulHhxfdAQNmTbM'   # Lấy tại Google Cloud -->API_KEY
@@ -17,7 +17,10 @@ url = f'https://sheets.googleapis.com/v4/spreadsheets/{sheet_id}/values/{sheet_r
 response = requests.get(url)
 
 if response.status_code == 200:
-    data = response.json().get('values', [])
-    print(data);
+    data = response.json()#.get('values', [])
+    print(data)
+
 else:
     print('Error:', response.status_code)
+
+

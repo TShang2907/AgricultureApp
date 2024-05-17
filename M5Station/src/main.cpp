@@ -150,7 +150,7 @@ void RUN_Dispatch_Task(void)
       }
       else
       {
-        // controllRelay(Index, true);
+        controllRelay(Index, true);
         Serial.print("Controll Relay: ");
         Serial.println(Index);
       }
@@ -320,92 +320,6 @@ void setupWifi()
   }
   M5.Lcd.printf("\nSuccessful Wifi connection\n");
 }
-// task
-// void taskSchedule(void *pvParameters)
-// {
-//   JsonArray scheduleList = schedule_json["schedule_list"].as<JsonArray>();
-//   int index = 0;
-//   int countTime = 0;
-//   bool isWaiting = false;
-//   if (scheduleList.size() != 0)
-//   {
-//     for (JsonVariant schedule : scheduleList)
-//     {
-//       String str;
-//       serializeJson(schedule, str);
-//       Serial.println(str);
-//       bool isActive = schedule["isActive"].as<bool>();
-//       const char *status = schedule["status"];
-//       Serial.println(isActive);
-//       Serial.println(status);
-
-//       if (strcmp(status, "WAITING") == 0 && isActive == true)
-//       {
-//         // String name = schedule["schedulerName"];
-//         isWaiting = true;
-//         break;
-//       }
-//       else
-//       {
-//         index++;
-//       }
-//     }
-//   }
-//   else
-//   {
-//     Serial.println("Lich tuoi trong");
-//     vTaskDelete(scheduleTask);
-//   }
-//   // Check schedule waiting
-//   if (isWaiting == false)
-//   {
-//     Serial.println("Khong co lich kich hoat");
-//     vTaskDelete(scheduleTask);
-//   }
-//   Serial.print("Index: ");
-//   Serial.println(index);
-//   // Start count timer for index of schedule.
-//   TickType_t xLastWakeTime;
-//   const TickType_t xFrequency = 60000 / portTICK_PERIOD_MS; // Độ trễ giữa các lần thực thi (5000ms)
-//   xLastWakeTime = xTaskGetTickCount();                      // Lấy thời gian hiện tại
-
-//   // Lấy thời gian hiện tại và in ra
-//   // Chờ cho phép cập nhật thời gian
-//   timeClient.update();
-
-//   int timeCurrent = timeClient.getHours() * 60 + timeClient.getMinutes();
-//   Serial.print("Current time: ");
-//   Serial.print(timeClient.getHours());
-//   Serial.print(":");
-//   Serial.println(timeClient.getMinutes());
-//   Serial.println(timeCurrent);
-
-//   // Lấy thời gian bắt đầu
-//   String strTimeStart = scheduleList[index]["startTime"];
-//   Serial.println("Start time: ");
-
-//   int colonIndex = strTimeStart.indexOf(':');
-
-//   int minute = strTimeStart.substring(0, colonIndex).toInt();
-//   int second = strTimeStart.substring(colonIndex + 1).toInt();
-//   int timeStart = minute * 60 + second;
-
-//   Serial.println(strTimeStart);
-//   Serial.println(timeStart);
-//   countTime = timeStart - timeCurrent;
-
-//   while (countTime > 0)
-//   {
-//     Serial.println("Count time: ");
-//     Serial.println(countTime);
-//     vTaskDelay(xFrequency);
-//     (countTime)--;
-//   }
-//   isSchedule = true;
-//   index_schedule = index;
-//   vTaskDelete(scheduleTask);
-//   scheduleTask = NULL;
-// }
 // Function Receive Data From MQTT Broker
 void myReceiveFunction(char *topic, byte *payload, unsigned int length)
 {
@@ -441,9 +355,10 @@ void myReceiveFunction(char *topic, byte *payload, unsigned int length)
         if (index < 2)
         {
           relay.relayWrite(index, value);
-          // M5.Lcd.print("Relay ");
-          // M5.Lcd.print(index);
-          // M5.Lcd.println(value);
+          Serial.print("Valve ");
+          Serial.print(index);
+          Serial.print(": ");
+          Serial.println(value);
         }
       }
       index++;
@@ -472,9 +387,10 @@ void myReceiveFunction(char *topic, byte *payload, unsigned int length)
         if (index > 5)
         {
           relay.relayWrite(index - 4, value);
-          // M5.Lcd.print("Relay ");
-          // M5.Lcd.print(index - 4);
-          // M5.Lcd.println(value);
+          Serial.print("Pump ");
+          Serial.print(index - 4);
+          Serial.print(": ");
+          Serial.println(value);
         }
       }
       index++;
@@ -502,11 +418,10 @@ void myReceiveFunction(char *topic, byte *payload, unsigned int length)
   {
     deserializeJson(schedule_json, data_sensor);
     SCH_Add_TASK();
-    // if (scheduleTask == NULL)
-    // {
-    //   Serial.print("The pointer null");
-    // }
-    // xTaskCreatePinnedToCore(taskSchedule, "taskSchedule", 5000, NULL, 2, &scheduleTask, 0);
+    if (isFirst == false)
+    {
+      serializeJson(schedule_json, Serial1);
+    }
   }
 }
 
@@ -598,56 +513,37 @@ void setup()
 
 void loop()
 {
-  // char *receiveMessage = returnMessage();
-  // if (isFirst == true)
-  // {
-  //   if (strcmp(receiveMessage, "START") == 0)
-  //   {
-  //     M5.Lcd.println("Returned message: " + String(receiveMessage));
-  //     serializeJson(valve_json, Serial1);
-  //   }
-  //   else if (strcmp(receiveMessage, "OK_VALVE") == 0)
-  //   {
-  //     M5.Lcd.println("Returned message: " + String(receiveMessage));
-  //     serializeJson(pump_json, Serial1);
-  //   }
-  //   else if (strcmp(receiveMessage, "OK_PUMP") == 0)
-  //   {
-  //     M5.Lcd.println("Returned message: " + String(receiveMessage));
-  //     serializeJson(sensors_json, Serial1);
-  //   }
-  //   else if (strcmp(receiveMessage, "OK_SENSOR") == 0)
-  //   {
-  //     M5.Lcd.println("Returned message: " + String(receiveMessage));
-  //     isFirst = false;
-  //   }
-  // }
+  char *receiveMessage = returnMessage();
+  if (isFirst == true)
+  {
+    if (strcmp(receiveMessage, "START") == 0)
+    {
+      M5.Lcd.println("Returned message: " + String(receiveMessage));
+      serializeJson(valve_json, Serial1);
+    }
+    else if (strcmp(receiveMessage, "OK_VALVE") == 0)
+    {
+      M5.Lcd.println("Returned message: " + String(receiveMessage));
+      serializeJson(pump_json, Serial1);
+    }
+    else if (strcmp(receiveMessage, "OK_PUMP") == 0)
+    {
+      M5.Lcd.println("Returned message: " + String(receiveMessage));
+      serializeJson(sensors_json, Serial1);
+    }
+    else if (strcmp(receiveMessage, "OK_SENSOR") == 0)
+    {
+      M5.Lcd.println("Returned message: " + String(receiveMessage));
+      serializeJson(schedule_json, Serial1);
+    }
+    else if (strcmp(receiveMessage, "OK_SCHEDULE") == 0)
+    {
+      M5.Lcd.println("Returned message: " + String(receiveMessage));
+      isFirst = false;
+    }
+  }
 
   mqtt.checkConnect(); // Check connected mqtt
-  // M5.update(); // Update state button
-  // if (M5.BtnA.wasPressed())
-  // {
-  //   serializeJson(doc, Serial1);
-  //   M5.Lcd.println("Send data successfully");
-  // }
-  SCH_Dispatch_Tasks();
-  // Serial.println(counterTimer);
-  //  if (isSchedule)
-  //  {
-  //    Serial.println("Relay\n");
-  //    Serial.println(index_schedule);
-  //    // Create task reciev data
-  //    // xTaskCreatePinnedToCore(taskRecieveData, "taskRecieveData", 4096, NULL, 1, &recieveDataTask, 0);
-  //    // Thuc thi lịch tưới
-  //    delay(5000);
-  //    String schedule_str;
-  //    schedule_json["schedule_list"][index_schedule]["status"] = "RUNNING";
-  //    serializeJson(schedule_json, schedule_str);
-  //    const char *shedule_char1 = schedule_str.c_str();
-  //    mqtt.publish(SCHEDULE_TOPIC, shedule_char1);
-  //    isSchedule = false;
-  //  }
 
-  // Serial.println(counterTimer);
-  //  delay(2000);
+  SCH_Dispatch_Tasks();
 }

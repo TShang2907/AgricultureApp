@@ -4,57 +4,63 @@ import Paho from 'paho-mqtt';
 const MqttContext = createContext();
 const mqttClient = new Paho.Client("mqttserver.tk", Number(9001), "AppMobile");
 
-const sheetId = '1qO1gqFsBra6mbL7lR1GeKLbJBeAL10zf1mfkAdoFPk0';
-
-
 const apiKey = 'AIzaSyCGQxAPIFmR03S3CbNDtulHhxfdAQNmTbM';
 const parameter1 = 'majorDimension=COLUMNS';
 const parameter2 = 'valueRenderOption=FORMULA';
 const parameter3 = 'dateTimeRenderOption=FORMATTED_STRING';
-let startRow = 70
+let startRow = 300
+let startRow_Prediction = 300
 
 
 const DataProvider = ({ children }) => {
 
-  const [messageMonitoring, setMessageMonitoring] = useState('');
+  //const [messageMonitoring, setMessageMonitoring] = useState('');
   const [messageValvecontroller, setMessageValvecontroller] = useState('');
 
   const [messagePumpcontroller, setmessagePumpcontroller] = useState('');
   const [messageSchedulelist, setMessageSchedulelist] = useState('');
-  const [isInitialized, setIsInitialized] = useState(false);
+  //const [isInitialized, setIsInitialized] = useState(true);
 
   const [sensorData, setSensorData] = useState([]);
   const [predictionData, setPredictionData] = useState([]);
 
-  const sheetRange_real = 'RealData!B' + startRow + ':K';
-  const sheetRange_prediction = 'PredictionData!B' + startRow + ':K';
-  // const [startRow, setStartRow] = useState(numRow);
+  // const sheetRange_real = 'RealData!B' + startRow + ':K';
+  // const sheetRange_prediction = 'PredictionData!B' + startRow + ':K';
+
 
   // Khởi tạo một đối tượng GoogleSpreadsheet
   const sheetId = '1qO1gqFsBra6mbL7lR1GeKLbJBeAL10zf1mfkAdoFPk0';
 
-  const fetchData = async (sheetName) => {
+  const fetchData = async (sheetName, numRow) => {
 
-    const sheetRange = sheetName + '!B' + startRow + ':K';
+    const sheetRange = sheetName + '!B' + numRow + ':K';
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey}&${parameter1}&${parameter2}&${parameter3}`;
 
-    console.log("Số hàng", startRow);
+
     try {
       const response = await fetch(url);
-      if (response.ok) {
+      if (response?.ok) {
         const jsonData = await response.json();
 
         if (jsonData.values[0].length > 9) {
           const delay = jsonData.values[0].length - 9;
-          startRow = startRow + delay;
-          fetchData(sheetName);
+          if (sheetName == "Data") {
+            startRow = startRow + delay;
+            fetchData(sheetName, startRow);
+          } else {
+            startRow_Prediction = startRow_Prediction + delay;
+            fetchData(sheetName, startRow_Prediction);
+          }
         } else {
 
-          if (sheetName == "RealData") {
-            setSensorData(jsonData.values);
-            fetchData("PredictionData");
-          } else {
+          if (sheetName == "PredictionData_1") {
             setPredictionData(jsonData.values)
+            console.log("Số hàng PredictionData_1", numRow);
+
+          } else {
+            setSensorData(jsonData.values);
+            console.log("Số hàng Data", numRow);
+            //fetchData("PredictionData_1", startRow_Prediction);
           }
 
         }
@@ -116,11 +122,10 @@ const DataProvider = ({ children }) => {
 
     // Monitoring
     if (message.destinationName == "/innovation/airmonitoring/NBIOTs") {
-      setMessageMonitoring(message.payloadString);
-
+      fetchData("Data", startRow);
     }
     if (message.destinationName == "/innovation/airmonitoring/AI") {
-      fetchData("RealData");
+      fetchData("PredictionData_1", startRow_Prediction);
     }
     // Valecontroler
     if (message.destinationName == "/innovation/valvecontroller/station") {
@@ -165,7 +170,7 @@ const DataProvider = ({ children }) => {
 
 
   return (
-    <MqttContext.Provider value={{ predictionData, sensorData, messageMonitoring, messageValvecontroller, messagePumpcontroller, messageSchedulelist, updateData }}>
+    <MqttContext.Provider value={{ predictionData, sensorData, messageValvecontroller, messagePumpcontroller, messageSchedulelist, updateData }}>
       {children}
     </MqttContext.Provider>
   );

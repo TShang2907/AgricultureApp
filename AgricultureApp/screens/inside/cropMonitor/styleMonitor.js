@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
     marginTop: 25,
     height: 50,
   },
+  body: {
+    marginBottom: 100,
+  },
   menuIcon: {
     height: 30,
     width: 30,
@@ -53,7 +56,7 @@ const styles = StyleSheet.create({
   monitorLinechartBgArea: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 15,
+    marginVertical: 25,
   },
   tempChart: {
     justifyContent: 'center',
