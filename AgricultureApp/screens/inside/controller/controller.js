@@ -58,6 +58,7 @@ export default function Controller() {
   const [isEnabled4, setIsEnabled4] = useState(false);
   const [isEnabled5, setIsEnabled5] = useState(false);
   const [isEnabled6, setIsEnabled6] = useState(false);
+
   //const [isEnabled7, setIsEnabled7] = useState(false);
   const [isEnabled7, setIsEnabled7] = useState(JSON.parse(messagePumpcontroller).sensors[3].sensor_value);
   //const [isEnabled8, setIsEnabled8] = useState(false);
@@ -174,7 +175,7 @@ export default function Controller() {
       <Image
         blurRadius={70}
         style={styles.backgroundImage}
-        source={require('../../../images/bg.png')}
+        source={require('../../../images/bg1.jpg')}
       />
       <View style={styles.header}>
         <TouchableOpacity style={styles.menuIconArea} onPress={openMenu}>

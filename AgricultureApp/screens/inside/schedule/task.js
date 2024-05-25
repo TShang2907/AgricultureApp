@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Button } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
 import styles from './styleSchedule';
 import { Switch } from 'react-native-switch';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -16,9 +16,8 @@ const Task = (props) => {
 
 
     useEffect(() => {
-        if (isEnabled) setStatus('Đang chờ tưới');
-        else setStatus('Chưa kích hoạt')
-
+        // if (isEnabled) setStatus('Đang chờ tưới');
+        // else setStatus('Chưa kích hoạt')
 
         props.updateIsActive(isEnabled, index);
 
@@ -31,8 +30,15 @@ const Task = (props) => {
             setStatus('Đã tưới')
         } else if (props.schedule.status == "WAITING") {
             setStatus('Đang chờ tưới')
+        } else if (props.schedule.status == "SUSPENDED") {
+            setStatus('Đang tạm dừng')
         }
     }, [props.schedule.status]);
+
+    useEffect(() => {
+        setIsEnabled(props.schedule.isActive)
+    }, [props.schedule.isActive]);
+
 
     // const [cycle, setCycle] = useState(0);
     // const [startTime, setStartTime] = useState('null');
@@ -86,9 +92,9 @@ const Task = (props) => {
                     <Text>ml</Text>
                 </View>
                 <View style={styles.subtask}>
-                    <Text>Lặp lai: </Text>
+                    <Text>Phân khu: </Text>
                     <Text style={{ fontWeight: 'bold' }}
-                    >{props.schedule.cycle}</Text>
+                    >{props.schedule.area}</Text>
                     <Text>ngày</Text>
 
 
@@ -98,15 +104,28 @@ const Task = (props) => {
                     <Text>Trang thái: </Text>
                     <Text>{status}</Text>
                     <TouchableOpacity onPress={() => {
-                        alert('Bạn thực sự muốn hủy lịch tưới');
-                        props.removeSchedule(index);
+                        Alert.alert('Thông báo', 'Bạn thực sự muốn hủy lịch tưới', [
+                            {
+                                text: 'OK',
+                                onPress: () => {
+                                    ToastAndroid.showWithGravity(
+                                        'Lịch tưới đã được hủy',
+                                        ToastAndroid.SHORT,
+                                        ToastAndroid.CENTER);
+                                    props.removeSchedule(index);
+                                }
+                            }
+
+                        ], { cancelable: true }
+                        );
+
                     }}>
                         <MaterialCommunityIcons name="table-large-remove" size={35} color="#FF8484" />
                     </TouchableOpacity>
 
                 </View>
             </View>
-        </View>
+        </View >
 
     );
 }

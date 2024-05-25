@@ -175,18 +175,14 @@ export default function Monitor() {
             {
                 data: valueTemp,
                 color: (opacity = 1) => `rgba(255,255,255, ${opacity})`,
-                strokeWidth: 4,
+                strokeWidth: 2,
             },
             {
                 data: predictTemp,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
-                strokeWidth: 4,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
+                strokeWidth: 2,
             }
         ],
-        labelStyle: {
-            color: 'white', // Màu chữ
-            fontSize: 3,   // Kích thước chữ
-        },
 
     };
 
@@ -202,7 +198,7 @@ export default function Monitor() {
 
             {
                 data: predictHumi,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 3,
 
             },
@@ -223,7 +219,7 @@ export default function Monitor() {
             },
             {
                 data: predictTemp2,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 4,
             }
         ],
@@ -246,7 +242,7 @@ export default function Monitor() {
 
             {
                 data: predictHumi2,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 3,
 
             },
@@ -268,7 +264,7 @@ export default function Monitor() {
             },
             {
                 data: predictPH,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 4,
             }
         ],
@@ -291,7 +287,7 @@ export default function Monitor() {
 
             {
                 data: predictEC,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 3,
 
             },
@@ -313,7 +309,7 @@ export default function Monitor() {
             },
             {
                 data: predictNito,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 4,
             }
         ],
@@ -336,7 +332,7 @@ export default function Monitor() {
 
             {
                 data: predictPhotpho,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 3,
 
             },
@@ -358,7 +354,7 @@ export default function Monitor() {
             },
             {
                 data: predictKali,
-                color: (opacity = 1) => `rgba(255, 200, 0, ${opacity})`,
+                color: (opacity = 1) => `rgba(255, 176, 1, ${opacity})`,
                 strokeWidth: 4,
             }
         ],
@@ -372,7 +368,7 @@ export default function Monitor() {
     const renderDotContent = ({ x, y, index, indexData }) => {
 
         return (
-            <Text style={{ position: 'absolute', top: y - 17, left: x, color: 'white', fontSize: 9 }}>{indexData.toFixed(1)}</Text>
+            <Text style={{ position: 'absolute', top: y - 17, left: x, color: 'black', fontSize: 9 }}>{indexData.toFixed(1)}</Text>
         );
     };
 
@@ -389,8 +385,9 @@ export default function Monitor() {
             <Image
                 blurRadius={70}
                 style={styles.backgroundImage}
-                source={require('../../../images/bg.png')}
+                source={require('../../../images/bg1.jpg')}
             />
+
             <View style={styles.header}>
                 <TouchableOpacity style={styles.menuIconArea} onPress={openMenu}>
                     <Image
@@ -413,21 +410,24 @@ export default function Monitor() {
                             width={370}
                             height={250}
                             yAxisSuffix="°C"
-                            yAxisInterval={30}
                             fromZero={true}
                             //renderDotContent={renderDotContent}
 
 
                             chartConfig={{
-                                backgroundColor: 'rgba(255, 255, 255, 1)',
-                                backgroundGradientFrom: '#74c79d',
-                                backgroundGradientTo: '#74c79d',
+                                //backgroundColor: 'rgba(0, 255, 255, 1)',
+                                backgroundGradientFrom: '#00FFA3',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
 
 
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                color: (opacity = 0) => `rgba(9, 76, 110, ${opacity})`,
 
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
+                                },
                                 style: {
                                     borderRadius: 20
                                 },
@@ -470,13 +470,17 @@ export default function Monitor() {
 
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                backgroundGradientFrom: '#57CCED',
-                                backgroundGradientTo: '#57CCED',
+                                backgroundGradientFrom: '#00E0FF',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                color: (opacity = 1) => `rgba(9,76,110, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
                             }}
                             bezier
@@ -485,6 +489,7 @@ export default function Monitor() {
                                 marginHorizontal: 10,
                                 borderRadius: 17
                             }}
+
                         />
                         <View style={styles.tempChart}>
                             <Text style={styles.nhietDo}>Độ ẩm không khí</Text>
@@ -517,15 +522,19 @@ export default function Monitor() {
                             // )}
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 1)',
-                                backgroundGradientFrom: '#74c79d',
-                                backgroundGradientTo: '#74c79d',
+                                backgroundGradientFrom: '#00FFA3',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
 
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
+                                color: (opacity = 0) => `rgba(9, 76, 110, ${opacity})`,
 
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
 
                             }}
@@ -565,13 +574,17 @@ export default function Monitor() {
 
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                backgroundGradientFrom: '#57CCED',
-                                backgroundGradientTo: '#57CCED',
+                                backgroundGradientFrom: '#00E0FF',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                color: (opacity = 1) => `rgba(9,76,110, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
                             }}
                             bezier
@@ -612,15 +625,19 @@ export default function Monitor() {
                             // )}
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 1)',
-                                backgroundGradientFrom: '#74c79d',
-                                backgroundGradientTo: '#74c79d',
+                                backgroundGradientFrom: '#00FFA3',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
 
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
+                                color: (opacity = 0) => `rgba(9, 76, 110, ${opacity})`,
 
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
 
                             }}
@@ -660,13 +677,17 @@ export default function Monitor() {
 
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                backgroundGradientFrom: '#57CCED',
-                                backgroundGradientTo: '#57CCED',
+                                backgroundGradientFrom: '#00E0FF',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                color: (opacity = 1) => `rgba(9,76,110, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
                             }}
                             bezier
@@ -707,15 +728,19 @@ export default function Monitor() {
                             // )}
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 1)',
-                                backgroundGradientFrom: '#74c79d',
-                                backgroundGradientTo: '#74c79d',
+                                backgroundGradientFrom: '#00FFA3',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
 
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
+                                color: (opacity = 0) => `rgba(9, 76, 110, ${opacity})`,
 
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
 
                             }}
@@ -755,13 +780,17 @@ export default function Monitor() {
 
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                backgroundGradientFrom: '#57CCED',
-                                backgroundGradientTo: '#57CCED',
+                                backgroundGradientFrom: '#00E0FF',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                color: (opacity = 1) => `rgba(9,76,110, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
                             }}
                             bezier
@@ -802,15 +831,19 @@ export default function Monitor() {
                             // )}
                             chartConfig={{
                                 backgroundColor: 'rgba(255, 255, 255, 1)',
-                                backgroundGradientFrom: '#74c79d',
-                                backgroundGradientTo: '#74c79d',
+                                backgroundGradientFrom: '#00FFA3',
+                                backgroundGradientTo: '#BDFFD0',
                                 decimalPlaces: 2,
 
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
+                                color: (opacity = 0) => `rgba(9, 76, 110, ${opacity})`,
 
                                 style: {
                                     borderRadius: 20
+                                },
+                                propsForLabels: {
+                                    fontSize: 12,  // Điều chỉnh kích thước font của label tại đây
+                                    fontWeight: 'bold',  // Bạn có thể thêm các thuộc tính khác như fontWeight, fontFamily, v.v.
                                 },
 
                             }}

@@ -24,8 +24,8 @@ function Tabs() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: styles.container,
-        tabBarActiveTintColor: '#FFD826',
-        tabBarInactiveTintColor: 'white',
+        tabBarActiveTintColor: '#F8B623',
+        tabBarInactiveTintColor: 'black',
         tabBarLabelStyle: styles.text
       }}
 
@@ -43,8 +43,7 @@ function Tabs() {
         component={Monitor}
         options={{
           title: 'Trang chủ',
-          tabBarIcon: ({ color }) => <Feather name="home" size={24} color="white" />,
-
+          tabBarIcon: ({ color }) => <Feather name="home" size={24} color="black" />,
         }}
       />
       <Tab.Screen
@@ -52,7 +51,7 @@ function Tabs() {
         component={Controller}
         options={{
           title: 'Điều khiển',
-          tabBarIcon: ({ color }) => <AntDesign name="setting" size={24} color="white" />
+          tabBarIcon: ({ color }) => <AntDesign name="setting" size={24} color="black" />
         }}
       />
       <Tab.Screen
@@ -60,7 +59,7 @@ function Tabs() {
         component={ScheduleStack}
         options={{
           title: 'Lập lịch',
-          tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="white" />
+          tabBarIcon: ({ color }) => <MaterialIcons name="schedule" size={24} color="black" />
         }}
       />
 
@@ -74,15 +73,15 @@ export default Tabs;
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    right: 0,
-    left: 0,
-    height: 65,
-    bottom: 0,
-    backgroundColor: 'rgba(108, 221, 208, 0.4)',
-    //borderRadius: 20
+    right: 20,
+    left: 20,
+    height: 70,
+    bottom: 15,
+    backgroundColor: 'rgba(219, 253, 218, 1)',
+    borderRadius: 20
   },
   text: {
-    bottom: 5,
+    bottom: 10,
     fontSize: 12
   }
 })

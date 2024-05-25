@@ -35,11 +35,11 @@ export default function Schedule({ navigation, scheduleList, updateIsActive, rem
             <Image
                 blurRadius={70}
                 style={styles.backgroundImage}
-                source={require('../../../images/bg.png')}
+                source={require('../../../images/bg1.jpg')}
             />
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Lịch Tưới</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Lịch Tưới</Text>
                 </View>
                 <View style={styles.body}>
                     <ScrollView>
@@ -59,7 +59,7 @@ export default function Schedule({ navigation, scheduleList, updateIsActive, rem
                     <View style={styles.button}>
 
                         <TouchableOpacity onPress={() => navigation.navigate('ScheduleSetting')}>
-                            <MaterialIcons name="add-circle" size={70} color="#C4FCE8" />
+                            <MaterialIcons name="add-circle" size={70} color="#008037" />
                         </TouchableOpacity>
 
                     </View>
@@ -74,7 +74,7 @@ export default function Schedule({ navigation, scheduleList, updateIsActive, rem
 const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
-        resizeMode: 'cover',
+        resizeMode: 'stretch',
         width: '100%',
         height: '100%',
         position: 'absolute',
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
     },
     button: {
         position: 'absolute',
-        right: 20,
-        bottom: 90
+        right: 15,
+        bottom: 120
     }
 
 

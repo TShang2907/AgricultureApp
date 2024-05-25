@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Button, Image, TouchableOpacity, TextInput, ToastAndroid } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -17,6 +17,7 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
     const [photphoValue, setPhotphoValue] = useState('0');
     const [isActive, setIsActive] = useState(true);
     const [status, setStatus] = useState('WAITING');
+    const [area, setArea] = useState('1');
     const schedule = {
         startTime: start_time,
         endTime: end_time,
@@ -25,28 +26,36 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
         photphoValue: parseInt(photphoValue),
         cycle: parseInt(cycle),
         isActive: isActive,
-        status: status
-
+        status: status,
+        area: parseInt(area)
     }
 
 
     const sendSchedule = () => {
 
+        ToastAndroid.showWithGravity(
+            'Lịch tưới đã được kích hoạt',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
 
-        alert('Lịch tưới đã được kích hoạt và lưu lại');
         schedule.startTime = start_time;
         schedule.endTime = end_time;
         schedule.nitorValue = parseInt(nitorValue);
         schedule.kaliValue = parseInt(kaliValue);
         schedule.photphoValue = parseInt(photphoValue);
         schedule.cycle = parseInt(cycle);
+        schedule.area = parseInt(area);
         schedule.isActive = isActive;
         schedule.status = 'WAITING';
 
         console.log("Send From ScheduleSetting to ScheduleStack");
         onDataFromScheduleStack(schedule);
 
-        //navigation.navigate('Schedule');
+        navigation.navigate('Schedule');
+    }
+    const backSchedule = () => {
+        navigation.navigate('Schedule');
     }
 
     // useEffect(() => {
@@ -108,15 +117,15 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
             <Image
                 blurRadius={70}
                 style={styles.backgroundImage}
-                source={require('../../../images/bg.png')}
+                source={require('../../../images/bg1.jpg')}
             />
             <View style={styles.content}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.navigate('Schedule')}>
-                        <Ionicons name="arrow-back" size={24} color="white" />
+                        <Ionicons name="arrow-back" size={24} color="black" />
                     </TouchableOpacity>
 
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', paddingLeft: 20 }}>Lập Lịch</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', paddingLeft: 20 }}>Lập Lịch</Text>
                 </View>
                 <View style={styles.body}>
                     <View style={styles.task}>
@@ -159,10 +168,10 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
                             <Text>ml</Text>
                         </View>
                         <View style={styles.subtask}>
-                            <Text>Lặp lại: </Text>
+                            <Text>Phân khu: </Text>
                             <TextInput style={styles.input}
-                                onChangeText={setCycle}
-                                value={cycle}
+                                onChangeText={setArea}
+                                value={area}
 
                                 keyboardType="numeric"
                             />
@@ -170,20 +179,16 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
                         </View>
                         <View style={{ flexDirection: 'row' }}>
 
-                            <View style={{ flex: 1, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
+                            <TouchableOpacity onPress={backSchedule} style={{ flex: 1, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ paddingVertical: 10, color: 'white', fontSize: 15 }}>Hủy</Text>
-                            </View>
+                            </TouchableOpacity>
+
                             <TouchableOpacity onPress={sendSchedule} style={{ flex: 1, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center' }} >
 
                                 <Text style={{ color: 'white', fontSize: 15 }}>Lưu lại</Text>
 
                             </TouchableOpacity>
 
-
-                            {/* <Button title='Hủy' color='red' />
- 
-
-                            <Button title='Lưu' color='green' /> */}
 
                         </View>
 
@@ -216,8 +221,9 @@ export default function ScheduleSetting({ navigation, onDataFromScheduleStack })
 
 const styles = StyleSheet.create({
     backgroundImage: {
+        opacity: 0.8,
         flex: 1,
-        resizeMode: 'cover',
+        resizeMode: 'stretch',
         width: '100%',
         height: '100%',
         position: 'absolute',

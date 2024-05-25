@@ -97,9 +97,9 @@ const DataProvider = ({ children }) => {
     if (mqttClient) {
       mqttClient.subscribe("/innovation/airmonitoring/NBIOTs");
       mqttClient.subscribe("/innovation/airmonitoring/AI");
-      mqttClient.subscribe("/innovation/valvecontroller/station");
-      mqttClient.subscribe("/innovation/pumpcontroller/station");
-      mqttClient.subscribe("/innovation/valvecontroller/schedulelist");
+      mqttClient.subscribe("/innovation/valvecontroller/station1");
+      mqttClient.subscribe("/innovation/pumpcontroller/station1");
+      mqttClient.subscribe("/innovation/valvecontroller/schedulelist1");
       console.log("Connected to MQTT server");
 
     }
@@ -128,15 +128,15 @@ const DataProvider = ({ children }) => {
       fetchData("PredictionData_1", startRow_Prediction);
     }
     // Valecontroler
-    if (message.destinationName == "/innovation/valvecontroller/station") {
+    if (message.destinationName == "/innovation/valvecontroller/station1") {
       setMessageValvecontroller(message.payloadString);
     }
     // Pumpcontroler
-    if (message.destinationName == "/innovation/pumpcontroller/station") {
+    if (message.destinationName == "/innovation/pumpcontroller/station1") {
       setmessagePumpcontroller(message.payloadString);
     }
     // Schedulelist
-    if (message.destinationName == "/innovation/valvecontroller/schedulelist") {
+    if (message.destinationName == "/innovation/valvecontroller/schedulelist1") {
       setMessageSchedulelist(message.payloadString);
     }
 
@@ -146,18 +146,18 @@ const DataProvider = ({ children }) => {
     if (mqttClient && mqttClient.isConnected()) {
       if (data.station_id == "VALVE_0001") {
         const message = new Paho.Message(JSON.stringify(data));
-        message.destinationName = "/innovation/valvecontroller/station";
+        message.destinationName = "/innovation/valvecontroller/station1";
         message.retained = true;
         mqttClient.send(message);
       } else if (data.station_id == "PUMP_0001") {
         const message = new Paho.Message(JSON.stringify(data));
-        message.destinationName = "/innovation/pumpcontroller/station";
+        message.destinationName = "/innovation/pumpcontroller/station1";
         message.retained = true;
         mqttClient.send(message);
       } else if (data.station_id == "SCHEDULE_0001") {
         console.log('Schedule publish:', data.schedule_list)
         const message = new Paho.Message(JSON.stringify(data));
-        message.destinationName = "/innovation/valvecontroller/schedulelist";
+        message.destinationName = "/innovation/valvecontroller/schedulelist1";
         message.retained = true;
         mqttClient.send(message);
       }

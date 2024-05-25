@@ -9,8 +9,9 @@ const styles = StyleSheet.create({
     // backgroundColor: '#F1F1F1'
   },
   backgroundImage: {
+    opacity: 1,
     flex: 1,
-    resizeMode: 'cover',
+    resizeMode: 'stretch',
     width: '100%',
     height: '100%',
     position: 'absolute',
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     // backgroundColor: '#146030',
-    marginTop: 25,
+    marginTop: 40,
     height: 50,
   },
   menuIcon: {
@@ -39,7 +40,8 @@ const styles = StyleSheet.create({
   },
   theoDoiCayTrong: {
     fontSize: 22,
-    color: '#fff'
+    color: '#000',
+    fontWeight: 'bold'
   },
   monitorLinechartBg: {
     justifyContent: 'center',
@@ -156,6 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonArea: {
+    marginTop: 15,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -163,19 +166,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   buttonText: {
-    color: '#fff',
+    color: '#000',
     margin: 10
   },
   switch1: {
     height: 100,
     width: 150,
-    backgroundColor: theme.bgWhite(0.15),
+    backgroundColor: theme.bgWhite(1),
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     borderRadius: 10,
-    margin: 10
+    margin: 10,
   },
+
   buttonAreaRow2: {
     flexDirection: 'row'
   },

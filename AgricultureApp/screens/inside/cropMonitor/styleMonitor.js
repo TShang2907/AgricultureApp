@@ -6,11 +6,12 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
-    // backgroundColor: '#157639'
+    //backgroundColor: '#bbf8bf'
   },
   backgroundImage: {
+    opacity: 0.5,
     flex: 1,
-    resizeMode: 'cover',
+    resizeMode: 'stretch',
     width: '100%',
     height: '100%',
     position: 'absolute',
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     // backgroundColor: '#146030',
-    marginTop: 25,
+    marginTop: 40,
     height: 50,
   },
   body: {
@@ -43,7 +44,8 @@ const styles = StyleSheet.create({
   },
   theoDoiCayTrong: {
     fontSize: 22,
-    color: '#fff',
+    color: '#000',
+    fontWeight: 'bold'
   },
   monitorLinechartBg: {
     justifyContent: 'center',
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
   },
   nhietDo: {
     fontWeight: 'bold',
-    color: '#fff'
+    color: '#094C6E'
   },
   soilArea: {
     flexDirection: 'row',
